@@ -1,0 +1,93 @@
+//
+//  GroupsSearchController.swift
+//  VK App
+//
+//  Created by Микаэл Мартиросян on 31.03.2022.
+//
+
+import UIKit
+import Alamofire
+
+class GroupsSearchController: UITableViewController {
+    
+    // MARK: - Properties
+    
+    let networkService = GroupsNetworkService()
+    var groupSearch = [GroupsSearchItem]()
+//    private let groupsController = GroupsController()
+    private var timer: Timer?
+    
+    // MARK: - viewDidLoad
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        setupConfig()
+    }
+    
+    // MARK: - Set up view
+    
+    private func setupConfig() {
+        view.backgroundColor = .systemBackground
+        
+        tableView.register(GroupsCell.self, forCellReuseIdentifier: CellIdentifier.groupsCell.rawValue)
+        
+        let searchController = UISearchController(searchResultsController: nil)
+        searchController.searchBar.delegate = self
+//        searchController.searchResultsUpdater = self
+        navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
+        navigationItem.title = Title.groupSearch.rawValue
+    }
+
+    // MARK: - Table view data source
+
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return groupSearch.count
+    }
+
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: CellIdentifier.groupsCell.rawValue, for: indexPath) as? GroupsCell else { return UITableViewCell() }
+        
+        if let url = URL(string: groupSearch[indexPath.row].photo50) {
+            AF.download(url, method: .get).responseData { response in
+                guard let data = response.value else { return }
+                let image = UIImage(data: data)
+                cell.avatar.image = image
+            }
+        }
+
+        cell.name.text = groupSearch[indexPath.row].name
+        
+        return cell
+    }
+    
+    // MARK: - Table view delegate
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 70
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        let newGroup = groupSearch[indexPath.row]
+        if editingStyle == .insert {
+            if newGroup.isMember == 0 {
+                networkService.join(by: newGroup.id)
+                
+                let alert = UIAlertController(title: "", message: "Группа успешно добавлена", preferredStyle: .alert)
+                let action = UIAlertAction(title: "OK", style: .default)
+                
+                alert.addAction(action)
+                present(alert, animated: true)
+            }
+        }
+    }
+}
