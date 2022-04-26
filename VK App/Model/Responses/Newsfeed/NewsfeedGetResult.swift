@@ -100,7 +100,7 @@ struct Photo: Decodable {
     let albumID, date, id, ownerID: Int
     let accessKey: String
     let postID: Int
-    let sizes: [Size]
+    let sizes: [NewsfeedPhotoSize]
     let text: String
     let userID: Int
 
@@ -115,7 +115,7 @@ struct Photo: Decodable {
     }
 }
 
-struct Size: Decodable {
+struct NewsfeedPhotoSize: Decodable {
     let height: Int
     let url: String
     let type: String

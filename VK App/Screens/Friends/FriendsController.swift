@@ -12,7 +12,8 @@ class FriendsController: UITableViewController {
     
     // MARK: - Properties
     
-    private let networkService = FriendsNetworkService()
+    private let friendsNetworkService = FriendsNetworkService()
+    private let photosNetworkService = PhotosNetworkService()
     private var friends = [FriendsGetItem]()
     
     // MARK: - viewDidLoad
@@ -25,7 +26,7 @@ class FriendsController: UITableViewController {
         
         tableView.register(FriendsCell.self, forCellReuseIdentifier: CellIdentifier.friendsCell.rawValue)
         
-        networkService.get { [weak self] response in
+        friendsNetworkService.get { [weak self] response in
             guard let self = self else { return }
             self.friends = response.items
             self.tableView.reloadData()
@@ -43,9 +44,7 @@ class FriendsController: UITableViewController {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CellIdentifier.friendsCell.rawValue, for: indexPath) as? FriendsCell else { return UITableViewCell() }
         
         if let url = URL(string: friends[indexPath.row].photo50) {
-            AF.download(url, method: .get).responseData { response in
-                guard let data = response.value else { return }
-                let image = UIImage(data: data)
+            FetchImage.fetchImage(url: url) { image in
                 cell.avatar.image = image
             }
         }
@@ -62,6 +61,13 @@ class FriendsController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
+        tableView.deselectRow(at: indexPath, animated: false)
+        let layout = UICollectionViewFlowLayout()
+        let photosVC = PhotosController(collectionViewLayout: layout)
+        navigationController?.pushViewController(photosVC, animated: true)
+        photosNetworkService.getAll(ownerID: friends[indexPath.row].id) { response in
+            photosVC.photos = response
+            photosVC.collectionView.reloadData()
+        }
     }
 }

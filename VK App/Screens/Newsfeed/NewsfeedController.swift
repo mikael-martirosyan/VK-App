@@ -62,6 +62,7 @@ class NewsfeedController: UITableViewController {
     
     // MARK: - Table view delegate
     
+    #warning("Заменить footer на view")
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 5))
         view.backgroundColor = .gray

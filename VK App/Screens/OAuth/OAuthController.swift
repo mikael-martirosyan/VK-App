@@ -1,5 +1,5 @@
 //
-//  OAuthVKController.swift
+//  OAuthController.swift
 //  VK App
 //
 //  Created by Микаэл Мартиросян on 29.03.2022.
@@ -7,9 +7,8 @@
 
 import UIKit
 import WebKit
-import Alamofire
 
-class OAuthVKController: UIViewController {
+class OAuthController: UIViewController {
     
     // MARK: - Properties
 
@@ -62,7 +61,7 @@ class OAuthVKController: UIViewController {
     }
 }
 
-extension OAuthVKController: WKNavigationDelegate {
+extension OAuthController: WKNavigationDelegate {
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
         

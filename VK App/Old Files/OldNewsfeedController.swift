@@ -55,7 +55,7 @@ import Alamofire
 //        let news = news[indexPath.row]
 //
 //        if let url = URL(string: news.avatar) {
-//            AF.download(url, method: .get).responseData { response in
+//            AF.download(url).responseData { response in
 //                guard let data = response.value else { return }
 //                let image = UIImage(data: data)
 //                cell.headerContentView.avatar.image = image
@@ -69,7 +69,7 @@ import Alamofire
 //
 //
 ////        if let url = URL(string: news.newsImage) {
-////            AF.download(url, method: .get).responseData { response in
+////            AF.download(url).responseData { response in
 ////                guard let data = response.value else { return }
 ////                let image = UIImage(data: data)
 ////                cell.newsImage.image = image
