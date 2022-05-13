@@ -50,9 +50,7 @@ class GroupsSearchController: UITableViewController {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CellIdentifier.groupsCell.rawValue, for: indexPath) as? GroupsCell else { return UITableViewCell() }
         
         if let url = URL(string: groupSearch[indexPath.row].photo50) {
-            AF.download(url, method: .get).responseData { response in
-                guard let data = response.value else { return }
-                let image = UIImage(data: data)
+            FetchImage.fetchImage(url: url) { image in
                 cell.avatar.image = image
             }
         }
@@ -76,6 +74,7 @@ class GroupsSearchController: UITableViewController {
         return true
     }
     
+    #warning("Исправить работу поиска")
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         let newGroup = groupSearch[indexPath.row]
         if editingStyle == .insert {

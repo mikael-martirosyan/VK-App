@@ -51,7 +51,7 @@ class GroupsController: UITableViewController {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CellIdentifier.groupsCell.rawValue, for: indexPath) as? GroupsCell else { return UITableViewCell() }
         
         if let url = URL(string: groups[indexPath.row].photo50) {
-            AF.download(url, method: .get).responseData { response in
+            AF.download(url).responseData { response in
                 guard let data = response.value else { return }
                 let image = UIImage(data: data)
                 cell.avatar.image = image
@@ -63,6 +63,7 @@ class GroupsController: UITableViewController {
         return cell
     }
     
+    #warning("Исправить работу удаления группы")
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             let group = groups[indexPath.row]

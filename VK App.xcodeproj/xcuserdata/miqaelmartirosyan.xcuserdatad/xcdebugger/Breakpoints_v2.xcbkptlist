@@ -279,23 +279,87 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "FB34A328-F20E-40F9-B035-940A27661959"
+            uuid = "086BA399-1B41-4F53-AAB7-C74A5D9734C3"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "VK App/Model/NetworkSevice/NewsfeedNetworkService.swift"
+            filePath = "VK App/Screens/Photos/PhotosController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "98"
-            endingLineNumber = "98"
-            landmarkName = "get(completion:)"
+            startingLineNumber = "31"
+            endingLineNumber = "31"
+            landmarkName = "collectionView(_:cellForItemAt:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "0E317C19-D420-4C5E-BA99-4F743848D866"
+            uuid = "45C98976-98B7-4AD5-B184-BA3273E59368"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "VK App/Screens/Photos/AllPhotos/PhotosController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "35"
+            endingLineNumber = "35"
+            landmarkName = "collectionView(_:cellForItemAt:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "1715031D-1A8B-4B20-B6BB-468A67D2E55F"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "VK App/Screens/Newsfeed/NewsfeedController + Extension.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "71"
+            endingLineNumber = "71"
+            landmarkName = "configurePhotoCell(by:indexPath:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "1715031D-1A8B-4B20-B6BB-468A67D2E55F - 9e2ac556a79038d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "VK_App.NewsfeedController.configurePhotoCell(by: VK_App.NewsfeedStruct, indexPath: Foundation.IndexPath) -&gt; VK_App.NewsfeedPhotoCell"
+                  moduleName = "VK App"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/miqaelmartirosyan/Documents/VK%20App/VK%20App/Screens/Newsfeed/NewsfeedController%20+%20Extension.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "71"
+                  endingLineNumber = "71"
+                  offsetFromSymbolStart = "853">
+               </Location>
+               <Location
+                  uuid = "1715031D-1A8B-4B20-B6BB-468A67D2E55F - 9e2ac556a79038d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "VK_App.NewsfeedController.configurePhotoCell(by: VK_App.NewsfeedStruct, indexPath: Foundation.IndexPath) -&gt; VK_App.NewsfeedPhotoCell"
+                  moduleName = "VK App"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/miqaelmartirosyan/Documents/VK%20App/VK%20App/Screens/Newsfeed/NewsfeedController%20+%20Extension.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "71"
+                  endingLineNumber = "71"
+                  offsetFromSymbolStart = "895">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "32DF6AD7-3872-4E5F-956C-B379826342D7"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
@@ -308,14 +372,14 @@
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "0E317C19-D420-4C5E-BA99-4F743848D866 - a22ef44dbdf9a7a5"
+                  uuid = "32DF6AD7-3872-4E5F-956C-B379826342D7 - e9d38978b575925e"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
                   symbolName = "closure #1 (Alamofire.DataResponse&lt;Foundation.Data, Alamofire.AFError&gt;) -&gt; () in VK_App.NewsfeedNetworkService.get(completion: (Swift.Array&lt;VK_App.NewsfeedStruct&gt;) -&gt; ()) -&gt; ()"
                   moduleName = "VK App"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/miqaelmartirosyan/Desktop/VK%20App/VK%20App/Model/NetworkSevice/NewsfeedNetworkService.swift"
+                  urlString = "file:///Users/miqaelmartirosyan/Documents/VK%20App/VK%20App/Model/NetworkSevice/NewsfeedNetworkService.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "84"
@@ -323,14 +387,14 @@
                   offsetFromSymbolStart = "2244">
                </Location>
                <Location
-                  uuid = "0E317C19-D420-4C5E-BA99-4F743848D866 - a22ef44dbdf9a7a5"
+                  uuid = "32DF6AD7-3872-4E5F-956C-B379826342D7 - e9d38978b575925e"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
                   symbolName = "closure #1 (Alamofire.DataResponse&lt;Foundation.Data, Alamofire.AFError&gt;) -&gt; () in VK_App.NewsfeedNetworkService.get(completion: (Swift.Array&lt;VK_App.NewsfeedStruct&gt;) -&gt; ()) -&gt; ()"
                   moduleName = "VK App"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/miqaelmartirosyan/Desktop/VK%20App/VK%20App/Model/NetworkSevice/NewsfeedNetworkService.swift"
+                  urlString = "file:///Users/miqaelmartirosyan/Documents/VK%20App/VK%20App/Model/NetworkSevice/NewsfeedNetworkService.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "84"
@@ -343,15 +407,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "A74E0485-1D41-405C-94D3-AFB8D4107DD3"
+            uuid = "82B3A7EE-7E44-4941-80BB-6B5990907B83"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "VK App/Model/NetworkSevice/NewsfeedNetworkService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "121"
-            endingLineNumber = "121"
+            startingLineNumber = "87"
+            endingLineNumber = "87"
             landmarkName = "get(completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -359,15 +423,47 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "CB21BA28-6D5F-49E2-84C7-AF0360852640"
+            uuid = "0ECA333A-8087-48AE-A63E-D29BF7D28CC5"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "VK App/Model/NetworkSevice/NewsfeedNetworkService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "73"
-            endingLineNumber = "73"
+            startingLineNumber = "88"
+            endingLineNumber = "88"
+            landmarkName = "get(completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B5F7F4ED-0B05-460D-88C5-9A22A92225EC"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "VK App/Model/NetworkSevice/NewsfeedNetworkService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "86"
+            endingLineNumber = "86"
+            landmarkName = "get(completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "C8EA926E-A403-487D-A384-9307DD686B9F"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "VK App/Model/NetworkSevice/NewsfeedNetworkService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "85"
+            endingLineNumber = "85"
             landmarkName = "get(completion:)"
             landmarkType = "7">
          </BreakpointContent>
