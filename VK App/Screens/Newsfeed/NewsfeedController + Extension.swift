@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Alamofire
 
 extension NewsfeedController {
     
@@ -18,6 +17,7 @@ extension NewsfeedController {
         tableView.register(TextCell.self, forCellReuseIdentifier: CellIdentifier.textCell.rawValue)
         tableView.register(NewsfeedPhotoCell.self, forCellReuseIdentifier: CellIdentifier.newsfeedPhotoCell.rawValue)
         tableView.register(InteractionsCell.self, forCellReuseIdentifier: CellIdentifier.interactionsCell.rawValue)
+        tableView.register(FooterCell.self, forCellReuseIdentifier: CellIdentifier.footerCell.rawValue)
     }
     
     /// Custom summary: Checking userLike for set up LikeControl
@@ -40,9 +40,13 @@ extension NewsfeedController {
     func configureSourceCell(by news: NewsfeedStruct, indexPath: IndexPath) -> SourceCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CellIdentifier.sourceCell.rawValue, for: indexPath) as? SourceCell else { fatalError() }
         
-        if let url = URL(string: news.avatar) {
-            FetchImage.fetchImage(url: url) { image in
-                cell.avatar.image = image
+        DispatchQueue.global().async {
+            if let url = URL(string: news.avatar) {
+                Networking.fetchImage(url: url) { image in
+                    DispatchQueue.main.async {
+                        cell.avatar.image = image
+                    }
+                }
             }
         }
         
@@ -67,30 +71,23 @@ extension NewsfeedController {
     /// Custom summary: Configure images of news in newsfeed
     func configurePhotoCell(by news: NewsfeedStruct, indexPath: IndexPath) -> NewsfeedPhotoCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CellIdentifier.newsfeedPhotoCell.rawValue, for: indexPath) as? NewsfeedPhotoCell else { fatalError() }
-        
-        if let photoURL = news.photoURL, let url = URL(string: photoURL) {
-            FetchImage.fetchImage(url: url) { image in
-                cell.photoImageView.image = image
+
+        DispatchQueue.global().async {
+            if let stringURL = news.photoURL, let url = URL(string: stringURL) {
+                Networking.fetchImage(url: url) { image in
+                    DispatchQueue.main.async {
+                        cell.photoImageView.image = image
+                        cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
+                    }
+                }
+            } else {
+                DispatchQueue.main.async {
+                    cell.photoImageView.image = nil
+                    cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
+                }
             }
-            
-//            AF.download(url).responseData { [weak self] response in
-//                guard let data = response.value,
-//                      let image = UIImage(data: data)
-//                else { return }
-//                cell.photoImageView.image = image
-                
-//                guard let height = news.height,
-//                      let width = news.width,
-//                      let self = self
-//                else { return }
-//                cell.heightAnchor.constraint(equalToConstant: .getPhotoHeight(height: height, width: width, viewWidth: self.view.frame.width)).isActive = true
-            cell.heightAnchor.constraint(equalToConstant: 350).isActive = true
-            cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
-//            }
-        } else {
-            cell.heightAnchor.constraint(equalToConstant: 0).isActive = true
-            cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
         }
+                
         return cell
     }
     
@@ -111,4 +108,23 @@ extension NewsfeedController {
         }
         return cell
     }
+    
+    /// Custom summary: Configure footer
+    func configureFooterCell(indexPath: IndexPath) -> FooterCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: CellIdentifier.footerCell.rawValue, for: indexPath) as? FooterCell else { fatalError() }
+        return cell
+    }
+    
+    
+//    func configureCell<T: UITableViewCell>(identifier: CellIdentifiers, indexPath: IndexPath, type: T) -> T {
+//        guard let cell = tableView.dequeueReusableCell(withIdentifier: identifier.rawValue, for: indexPath) as? T else { fatalError() }
+//        return cell
+//    }
+    
+    
+    
+//    func calculateCellHeight<T>(cell: T, indexPath: IndexPath, completion: (T) -> Void) {
+//        guard let cell = tableView.cellForRow(at: indexPath) as? T else { return }
+//        completion(cell)
+//    }
 }

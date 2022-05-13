@@ -1,5 +1,5 @@
 //
-//  ImagesCell.swift
+//  NewsfeedPhotoCell.swift
 //  VK App
 //
 //  Created by Микаэл Мартиросян on 18.04.2022.
@@ -14,7 +14,6 @@ class NewsfeedPhotoCell: UITableViewCell {
     let photoImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
-        imageView.clipsToBounds = true
         return imageView
     }()
     
@@ -35,9 +34,6 @@ class NewsfeedPhotoCell: UITableViewCell {
     private func setupConstraints() {
         addSubview(photoImageView)
         photoImageView.translatesAutoresizingMaskIntoConstraints = false
-//        photoImageView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-//        photoImageView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-//        photoImageView.heightAnchor.constraint(equalToConstant: 200).isActive = true
         photoImageView.topAnchor.constraint(equalTo: topAnchor).isActive = true
         photoImageView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         photoImageView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true

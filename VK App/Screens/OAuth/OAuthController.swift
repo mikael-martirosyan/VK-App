@@ -87,9 +87,6 @@ extension OAuthController: WKNavigationDelegate {
         Session.shared.token = token
         Session.shared.userID = userId
         
-        print(token)
-        print(userId)
-        
         let tabBarController = TabBarController()
         tabBarController.modalPresentationStyle = .fullScreen
         present(tabBarController, animated: true)

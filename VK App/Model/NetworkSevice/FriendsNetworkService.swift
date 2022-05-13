@@ -6,37 +6,36 @@
 //
 
 import Foundation
-import Alamofire
+import UIKit
 
 class FriendsNetworkService {
     
-    private let baseUrl = "https://api.vk.com/method/friends"
-    private let session = Session.shared
-    private let version = "5.131"
-
+    private let method = "/friends"
+    
     // MARK: - .get
     func get(completion: @escaping (FriendsGetResponse) -> Void) {
-        
-        let path = ".get"
-        let url = baseUrl + path
-        
-        guard let token = session.token else { return }
-        
-        let params: Parameters = [
-            "order": "hints",
-            "fields": "photo_50",
-            "access_token": token,
-            "v": version
+    
+        let path = method + ".get"
+    
+        let methodQueryItems = [
+            URLQueryItem(name: "order", value: "hints"),
+            URLQueryItem(name: "fields", value: "photo_50")
         ]
         
-        AF.request(url, method: .get, parameters: params).responseData { response in
-            guard let data = response.value else { return print("get friends data error") }
-            
-            do {
-                let response = try JSONDecoder().decode(FriendsGetResult.self, from: data).response
-                completion(response)
-            } catch {
+        Networking.request(path: path, optionItems: methodQueryItems) { data, error  in
+            if let error = error {
+                #warning("Обработать ошибки")
+                // Обработать ошибки
                 print(error)
+            } else if let data = data {
+                do {
+                    let result = try JSONDecoder().decode(FriendsGetResult.self, from: data)
+                    completion(result.response)
+                } catch {
+                    #warning("Обработать ошибки")
+                    // Обработать ошибки
+                    print(error)
+                }
             }
         }
     }

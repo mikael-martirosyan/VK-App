@@ -6,14 +6,13 @@
 //
 
 import UIKit
-import Alamofire
 
 class FullScreenPhotoController: UICollectionViewController {
     
     // MARK: - Properties
     
-    var photos = [PhotosGetAllItem]()
-    var indexPath: IndexPath? = nil
+    var photos = [PhotosStruct]()
+//    var indexPath: IndexPath? = nil
     
     // MARK: - viewDidLoad
 
@@ -44,12 +43,12 @@ class FullScreenPhotoController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CellIdentifier.fullScreenPhotoCell.rawValue, for: indexPath) as? FullScreenPhotoCell else { return UICollectionViewCell() }
         
-        let sizes = photos[indexPath.row].sizes
+        let photo = photos[indexPath.item]
         
-        for size in sizes {
-            if size.type == "x" {
-                if let url = URL(string: size.url) {
-                    FetchImage.fetchImage(url: url) { image in
+        DispatchQueue.global().async {
+            if let url = URL(string: photo.url) {
+                Networking.fetchImage(url: url) { image in
+                    DispatchQueue.main.async {
                         cell.photoImageView.image = image
                     }
                 }

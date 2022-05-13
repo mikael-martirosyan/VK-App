@@ -6,138 +6,73 @@
 //
 
 import UIKit
-import Alamofire
-
-struct NewsfeedStruct {
-    let sourceID: Int
-    let postID: Int
-    let avatar: String
-    let name: String
-    let date: Double
-    let text: String
-    let photoURL: String?
-    let height: Int?
-    let width: Int?
-    let likesCount: Int
-    let commentsCount: Int
-    let repostsCount: Int
-    let viewsCount: Int
-    let userLikes: Int
-}
 
 class NewsfeedNetworkService {
     
-    private let baseUrl = "https://api.vk.com/method/newsfeed"
-    private let session = Session.shared
-    private let version = "5.131"
+    let method = "/newsfeed"
     
     // MARK: - .get
     
     func get(completion: @escaping ([NewsfeedStruct]) -> Void) {
         
-        let path = ".get"
-        let url = baseUrl + path
-        
-        guard let token = session.token else { return }
-        
-        let params: Parameters = [
-            "filters": "post",
-            "count": 15,
-            "access_token": token,
-            "v": version
+        let path = method + ".get"
+
+        let methodQueryItems = [
+            URLQueryItem(name: "filters", value: "post"),
+            URLQueryItem(name: "count", value: "50")
         ]
         
-        AF.request(url, method: .get, parameters: params).responseData { response in
-            guard let data = response.value else { return }
-            
-            do {
-                let response = try JSONDecoder().decode(NewsfeedGetResult.self, from: data).response
-                
-                var sourceID: Int?
-                var postID: Int
-                var avatar: String?
-                var name: String?
-                var date: Double
-                var text: String
-                var photoURL: String?
-                var height: Int?
-                var width: Int?
-                var likesCount: Int
-                var commentsCount: Int
-                var repostsCount: Int
-                var viewsCount: Int
-                var userLikes: Int
-                
-                var news = [NewsfeedStruct]()
-                
-                for item in response.items {
-                    sourceID = item.sourceID
-                    postID = item.postID
-                    date = item.date
-                    text = item.text
-                    likesCount = item.likes.count
-                    commentsCount = item.comments.count
-                    repostsCount = item.reposts.count
-                    viewsCount = item.views.count
-                    userLikes = item.likes.userLikes
-
-                    if let attechments = item.attechments {
-                        for item in attechments {
-                            guard let photo = item.photo else { return }
-                            for size in photo.sizes {
-                                if size.type == "x" {
-                                    let url = size.url
-                                    photoURL = url
-                                    height = size.height
-                                    width = size.width
-                                }
-                            }
-                        }
-                    }
-                    
-                    if item.sourceID < 0 {
-                        let groupID = item.sourceID * -1
-                        
-                        for group in response.groups {
-                            if group.id == groupID {
-                                avatar = group.photo50
-                                name = group.name
-                            }
-                        }
-                    } else {
-                        for profile in response.profiles {
-                            if profile.id == item.sourceID {
-                                avatar = profile.photo50
-                                name = profile.fullName
-                            }
-                        }
-                    }
-                    
-                    guard let sourceID = sourceID,
-                          let avatar = avatar,
-                          let name = name
-                    else { return }
-                    
-                    news.append(NewsfeedStruct(sourceID: sourceID,
-                                               postID: postID,
-                                               avatar: avatar,
-                                               name: name,
-                                               date: date,
-                                               text: text,
-                                               photoURL: photoURL ?? nil,
-                                               height: height ?? nil,
-                                               width: width ?? nil,
-                                               likesCount: likesCount,
-                                               commentsCount: commentsCount,
-                                               repostsCount: repostsCount,
-                                               viewsCount: viewsCount,
-                                               userLikes: userLikes)
-                    )
-                }
-                
-                completion(news)
-            } catch {
+        Networking.request(path: path, optionItems: methodQueryItems) { data, error in
+            if let error = error {
+                #warning("Обработать ошибки")
+                // Обработать ошибки
                 print(error)
+            } else if let data = data {
+                do {
+                    let response = try JSONDecoder().decode(NewsfeedGetResult.self, from: data).response
+                    
+                    var newsList = [NewsfeedStruct]()
+                    
+                    for item in response.items {
+                        var news = NewsfeedStruct(sourceID: item.sourceID,
+                                                  postID: item.postID,
+                                                  avatar: "",
+                                                  name: "",
+                                                  date: item.date,
+                                                  text: item.text ?? "",
+                                                  photoURL: nil,
+                                                  height: nil,
+                                                  width: nil,
+                                                  likesCount: item.likes.count ?? 0,
+                                                  commentsCount: item.comments.count ?? 0,
+                                                  repostsCount: item.reposts.count ?? 0,
+                                                  viewsCount: item.views?.count ?? 0,
+                                                  userLikes: item.likes.userLikes)
+                        
+                        item.attachments?.forEach { attachments in
+                            if let size = attachments.photo?.sizes.first(where: { $0.type == "x" }) {
+                                news.photoURL = size.url
+                                news.height = size.height
+                                news.width = size.width
+                            }
+                        }
+
+                        if item.sourceID < 0,
+                           let group = response.groups.first(where: { $0.id == item.sourceID * -1}) {
+                                news.avatar = group.photo50
+                                news.name = group.name
+                        } else if let profile = response.profiles.first(where: { $0.id == item.sourceID }) {
+                            news.avatar = profile.photo50
+                            news.name = profile.fullName
+                        }
+                        
+                        newsList.append(news)
+                    }
+                    
+                    completion(newsList)
+                } catch {
+                    print(error)
+                }
             }
         }
     }

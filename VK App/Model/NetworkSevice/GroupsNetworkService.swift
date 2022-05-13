@@ -6,36 +6,38 @@
 //
 
 import Foundation
-import Alamofire
+
+enum GruopsMethods: String {
+    case join
+    case leave
+}
 
 class GroupsNetworkService {
     
-    private let baseUrl = "https://api.vk.com/method/groups"
-    private let session = Session.shared
-    private let version = "5.131"
+    private let method = "/groups"
     
-    // MARK: .get
+    // MARK: - .get
     func get(completion: @escaping (GroupsGetResponse) -> Void) {
         
-        let path = ".get"
-        let url = baseUrl + path
+        let path = method + ".get"
         
-        guard let token = session.token else { return }
-        
-        let params: Parameters = [
-            "extended": 1,
-            "fields": "name, photo_50",
-            "access_token": token,
-            "v": version
+        let methodQueryItems = [
+            URLQueryItem(name: "extended", value: "1"),
+            URLQueryItem(name: "fields", value: "name, photo_50")
         ]
         
-        AF.request(url, method: .get, parameters: params).responseData { response in
-            guard let data = response.value else { return print("data error") }
-            do {
-                let response = try JSONDecoder().decode(GroupsGetResult.self, from: data).response
-                completion(response)
-            } catch {
+        Networking.request(path: path, optionItems: methodQueryItems) { data, error in
+            if let error = error {
+                #warning("Обработать ошибки")
+                // Обработать ошибки
                 print(error)
+            } else if let data = data {
+                do {
+                    let response = try JSONDecoder().decode(GroupsGetResult.self, from: data).response
+                    completion(response)
+                } catch {
+                    fatalError("\(error)")
+                }
             }
         }
     }
@@ -43,24 +45,24 @@ class GroupsNetworkService {
     // MARK: - .join
     func join(by id: Int) {
         
-        let path = ".join"
-        let url = baseUrl + path
+        let path = method + ".join"
         
-        guard let token = session.token else { return }
-        
-        let params: Parameters = [
-            "group_id": id,
-            "access_token": token,
-            "v": version
+        let methodQueryItems = [
+            URLQueryItem(name: "group_id", value: String(id)),
+            URLQueryItem(name: "fields", value: "name, photo_50")
         ]
         
-        AF.request(url, method: .get, parameters: params).responseData { response in
-            guard let data = response.value else { return }
-            
-            do {
-                let _ = try JSONDecoder().decode(GroupsJoinResult.self, from: data).response
-            } catch {
+        Networking.request(path: path, optionItems: methodQueryItems) { data, error in
+            if let error = error {
+                #warning("Обработать ошибки")
+                // Обработать ошибки
                 print(error)
+            } else if let data = data {
+                do {
+                    let _ = try JSONDecoder().decode(GroupsJoinResult.self, from: data).response
+                } catch {
+                    fatalError("\(error)")
+                }
             }
         }
     }
@@ -69,23 +71,22 @@ class GroupsNetworkService {
     func leave(by id: Int) {
         
         let path = ".leave"
-        let url = baseUrl + path
         
-        guard let token = session.token else { return }
-        
-        let params: Parameters = [
-            "group_id": id,
-            "access_token": token,
-            "v": version
+        let methodQueryItems = [
+            URLQueryItem(name: "group_id", value: String(id)),
         ]
         
-        AF.request(url, method: .get, parameters: params).responseData { response in
-            guard let data = response.value else { return }
-            
-            do {
-                let _ = try JSONDecoder().decode(GroupsLeaveResult.self, from: data)
-            } catch {
+        Networking.request(path: path, optionItems: methodQueryItems) { data, error in
+            if let error = error {
+                #warning("Обработать ошибки")
+                // Обработать ошибки
                 print(error)
+            } else if let data = data {
+                do {
+                    let _ = try JSONDecoder().decode(GroupsLeaveResult.self, from: data)
+                } catch {
+                    fatalError("\(error)")
+                }
             }
         }
     }
@@ -93,29 +94,30 @@ class GroupsNetworkService {
     // MARK: - .search
     func search(request: String, completion: @escaping (GroupsSearchResponse) -> Void) {
         
-        let path = ".search"
-        let url = baseUrl + path
+        let path = method + ".search"
         
-        guard let token = session.token else { return }
-        
-        let params: Parameters = [
-            "q": request,
-            "type": "group, page",
-            "sort": 0, // по умолчанию
-            "count": 50,
-            "access_token": token,
-            "v": version
+        let methodQueryItems = [
+            URLQueryItem(name: "q", value: request),
+            URLQueryItem(name: "type", value: "group, page"),
+            URLQueryItem(name: "sort", value: "0"), // по умолчанию
+            URLQueryItem(name: "count", value: "50")
         ]
         
-        AF.request(url, method: .get, parameters: params).responseData { response in
-            guard let data = response.value else { return }
-            
-            do {
-                let response = try JSONDecoder().decode(GroupsSearchResult.self, from: data).response
-                
-                completion(response)
-            } catch {
+        Networking.request(path: path, optionItems: methodQueryItems) { data, error in
+            if let error = error {
+                #warning("Обработать ошибки")
+                // Обработать ошибки
                 print(error)
+            } else if let data = data {
+                do {
+                    let response = try JSONDecoder().decode(GroupsSearchResult.self, from: data).response
+                    
+                    completion(response)
+                } catch {
+                    #warning("Обработать ошибки")
+                    // Обработать ошибки
+                    print(error)
+                }
             }
         }
     }

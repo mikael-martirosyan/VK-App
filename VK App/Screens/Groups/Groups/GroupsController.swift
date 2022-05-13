@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Alamofire
 
 class GroupsController: UITableViewController {
     
@@ -29,7 +28,9 @@ class GroupsController: UITableViewController {
         networkService.get { [weak self] response in
             guard let self = self else { return }
             self.groups = response.items
-            self.tableView.reloadData()
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
         }
     }
     
@@ -50,11 +51,13 @@ class GroupsController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CellIdentifier.groupsCell.rawValue, for: indexPath) as? GroupsCell else { return UITableViewCell() }
         
-        if let url = URL(string: groups[indexPath.row].photo50) {
-            AF.download(url).responseData { response in
-                guard let data = response.value else { return }
-                let image = UIImage(data: data)
-                cell.avatar.image = image
+        DispatchQueue.global().async {
+            if let url = URL(string: self.groups[indexPath.row].photo50) {
+                Networking.fetchImage(url: url) { image in
+                    DispatchQueue.main.async {
+                        cell.avatar.image = image
+                    }
+                }
             }
         }
 
@@ -68,6 +71,7 @@ class GroupsController: UITableViewController {
         if editingStyle == .delete {
             let group = groups[indexPath.row]
             networkService.leave(by: group.id)
+            #warning("Добавить alert об ошибке удаления")
             groups.remove(at: indexPath.row)
             tableView.reloadData()
         }

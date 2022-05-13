@@ -27,12 +27,12 @@ struct NewsfeedGetItem: Decodable {
     let sourceID: Int
     let postID: Int
     let date: Double
-    let text: String
+    let text: String?
     let comments: CountableItem
     let likes: Likes
     let reposts: CountableItem
-    let views: CountableItem
-    let attechments: [Attechments]?
+    let views: CountableItem?
+    let attachments: [Attachments]?
 
     enum CodingKeys: String, CodingKey {
         case sourceID = "source_id"
@@ -40,17 +40,17 @@ struct NewsfeedGetItem: Decodable {
         case date
         case text
         case comments, likes, reposts, views
-        case attechments
+        case attachments
     }
 }
 
 /// Struct for all countable items
 struct CountableItem: Decodable {
-    let count: Int
+    let count: Int?
 }
 
 struct Likes: Decodable {
-    let count: Int
+    let count: Int?
     let userLikes: Int
 
     enum CodingKeys: String, CodingKey {
@@ -91,27 +91,27 @@ struct NewsfeedGetGroup: Decodable {
     }
 }
 
-struct Attechments: Decodable {
+struct Attachments: Decodable {
     let type: String
     let photo: Photo?
 }
 
 struct Photo: Decodable {
-    let albumID, date, id, ownerID: Int
-    let accessKey: String
-    let postID: Int
+//    let albumID, date, id, ownerID: Int
+//    let accessKey: String
+//    let postID: Int
     let sizes: [NewsfeedPhotoSize]
-    let text: String
-    let userID: Int
+//    let text: String
+//    let userID: Int
 
     enum CodingKeys: String, CodingKey {
-        case albumID = "album_id"
-        case date, id
-        case ownerID = "owner_id"
-        case accessKey = "access_key"
-        case postID = "post_id"
-        case sizes, text
-        case userID = "user_id"
+//        case albumID = "album_id"
+//        case date, id
+//        case ownerID = "owner_id"
+//        case accessKey = "access_key"
+//        case postID = "post_id"
+        case sizes //, text
+//        case userID = "user_id"
     }
 }
 

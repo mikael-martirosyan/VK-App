@@ -7,16 +7,16 @@
 
 import Foundation
 
-struct FriendsGetResult: Codable {
+struct FriendsGetResult: Decodable {
     let response: FriendsGetResponse
 }
 
-struct FriendsGetResponse: Codable {
+struct FriendsGetResponse: Decodable {
     let count: Int
     let items: [FriendsGetItem]
 }
 
-struct FriendsGetItem: Codable {
+struct FriendsGetItem: Decodable {
     let id: Int
     let firstName, lastName: String
     let photo50: String

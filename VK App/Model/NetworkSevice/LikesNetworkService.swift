@@ -6,38 +6,34 @@
 //
 
 import Foundation
-import Alamofire
 
 class LikesNetworkService {
     
-    let baseUrl = "https://api.vk.com/method/likes"
-    let session = Session.shared
-    let version = "5.131"
+    private let method = "/likes"
     
     // MARK: - .add
     
     func add(itemID: Int, completion: @escaping (Int) -> Void) {
         
-        let path = ".add"
-        let url = baseUrl + path
+        let path = method + ".add"
         
-        guard let token = session.token else { return }
-        
-        let params: Parameters = [
-            "type": "post",
-            "item_id": itemID,
-            "access_token": token,
-            "v": version
+        let methodQuertItems = [
+            URLQueryItem(name: "type", value: "post"),
+            URLQueryItem(name: "item_id", value: String(itemID))
         ]
         
-        AF.request(url, method: .get, parameters: params).responseData { response in
-            guard let data = response.value else { return }
-            
-            do {
-                let response = try JSONDecoder().decode(LikesAddResult.self, from: data).response
-                completion(response.likes)
-            } catch {
+        Networking.request(path: path, optionItems: methodQuertItems) { data, error in
+            if let error = error {
+                #warning("Обработать ошибки")
+                // Обработать ошибки
                 print(error)
+            } else if let data = data {
+                do {
+                    let response = try JSONDecoder().decode(LikesAddResult.self, from: data).response
+                    completion(response.likes)
+                } catch {
+                    fatalError("\(error)")
+                }
             }
         }
     }
@@ -73,30 +69,30 @@ class LikesNetworkService {
     
     func isLiked(ownerID: Int, itemID: Int, completion: @escaping (LikesIsLikedResponse) -> Void) {
         
-        let path = ".isLiked"
-        let url = baseUrl + path
+        let path = method + ".isLiked"
         
-        guard let token = session.token else { return }
-        guard let userID = session.userID else { return }
+
+        guard let userID = Session.shared.userID else { return }
         
-        let params: Parameters = [
-            "user_id": userID,
-            "type": "post",
-            "item_id": itemID,
-            "owner_id": ownerID,
-            "access_token": token,
-            "v": version
+        let methodQuertItems = [
+            URLQueryItem(name: "user_id", value: String(userID)),
+            URLQueryItem(name: "type", value: "post"),
+            URLQueryItem(name: "item_id", value: String(itemID)),
+            URLQueryItem(name: "owner_id", value: String(ownerID))
         ]
         
-        AF.request(url, method: .get, parameters: params).responseData { response in
-            guard let data = response.value else { return }
-        
-            do {
-                let response = try JSONDecoder().decode(LikesIsLikedResult.self, from: data).response
-                print(response)
-                completion(response)
-            } catch {
+        Networking.request(path: path, optionItems: methodQuertItems) { data, error in
+            if let error = error {
+                #warning("Обработать ошибки")
+                // Обработать ошибки
                 print(error)
+            } else if let data = data {
+                do {
+                    let response = try JSONDecoder().decode(LikesIsLikedResult.self, from: data).response
+                    completion(response)
+                } catch {
+                    fatalError("\(error)")
+                }
             }
         }
     }
