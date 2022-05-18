@@ -32,7 +32,7 @@ class FullScreenPhotoCell: UICollectionViewCell {
     // MARK: - Set up cell
     
     private func setupConstraints() {
-        addSubview(photoImageView)
+        contentView.addSubview(photoImageView)
         photoImageView.translatesAutoresizingMaskIntoConstraints = false
         photoImageView.topAnchor.constraint(equalTo: topAnchor).isActive = true
         photoImageView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true

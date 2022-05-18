@@ -24,12 +24,12 @@ class FooterCell: UITableViewCell {
     }
     
     private func setupConstraints() {
-        addSubview(footerView)
+        contentView.addSubview(footerView)
         footerView.translatesAutoresizingMaskIntoConstraints = false
-        footerView.topAnchor.constraint(equalTo: topAnchor, constant: 0).isActive = true
-        footerView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0).isActive = true
-        footerView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        footerView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        footerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0).isActive = true
+        footerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 0).isActive = true
+        footerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
+        footerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
         footerView.heightAnchor.constraint(equalToConstant: 10).isActive = true
     }
 }

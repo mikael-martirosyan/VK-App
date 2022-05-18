@@ -31,28 +31,28 @@ class InteractionsCell: UITableViewCell {
     // MARK: - Cell setup
     
     private func setupConstraints() {
-        addSubview(likesControl)
+        contentView.addSubview(likesControl)
         likesControl.translatesAutoresizingMaskIntoConstraints = false
-        likesControl.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        likesControl.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10).isActive = true
+        likesControl.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
+        likesControl.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10).isActive = true
         likesControl.heightAnchor.constraint(equalToConstant: 25).isActive = true
         
-        addSubview(commentsControl)
+        contentView.addSubview(commentsControl)
         commentsControl.translatesAutoresizingMaskIntoConstraints = false
-        commentsControl.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        commentsControl.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
         commentsControl.leadingAnchor.constraint(equalTo: likesControl.trailingAnchor, constant: 10).isActive = true
         commentsControl.heightAnchor.constraint(equalToConstant: 25).isActive = true
         
-        addSubview(repostsControl)
+        contentView.addSubview(repostsControl)
         repostsControl.translatesAutoresizingMaskIntoConstraints = false
-        repostsControl.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        repostsControl.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
         repostsControl.leadingAnchor.constraint(equalTo: commentsControl.trailingAnchor, constant: 10).isActive = true
         repostsControl.heightAnchor.constraint(equalToConstant: 25).isActive = true
         
-        addSubview(viewsContentView)
+        contentView.addSubview(viewsContentView)
         viewsContentView.translatesAutoresizingMaskIntoConstraints = false
-        viewsContentView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        viewsContentView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10).isActive = true
+        viewsContentView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
+        viewsContentView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10).isActive = true
         viewsContentView.heightAnchor.constraint(equalToConstant: 25).isActive = true
     }
 }

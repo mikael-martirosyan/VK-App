@@ -6,12 +6,15 @@
 //
 
 import UIKit
+import PromiseKit
+import SDWebImage
 
 class PhotosController: UICollectionViewController {
     
     // MARK: - Properties
     
     private let networkService = PhotosNetworkService()
+    var ownerID = 0
     var photos = [PhotosStruct]()
     
     let cellsPerRow: CGFloat = 3
@@ -22,7 +25,17 @@ class PhotosController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.collectionView!.register(PhotosCell.self, forCellWithReuseIdentifier: CellIdentifier.photosCell.rawValue)
+        self.collectionView.register(PhotosCell.self, forCellWithReuseIdentifier: CellIdentifier.photosCell.rawValue)
+        
+        DispatchQueue.global().async {
+            self.networkService.getAll(ownerID: self.ownerID, photoType: PhotoTypeCases.q) { [weak self] photos in
+                guard let self = self else { return }
+                self.photos = photos
+                DispatchQueue.main.async {
+                    self.collectionView.reloadData()
+                }
+            }
+        }
     }
     
     // MARK: - UICollectionView data source
@@ -36,15 +49,23 @@ class PhotosController: UICollectionViewController {
         
         let photo = photos[indexPath.item]
         
-        DispatchQueue.global().async {
-            if let url = URL(string: photo.url) {
-                Networking.fetchImage(url: url) { image in
-                    DispatchQueue.main.sync {
-                        cell.photoImageView.image = image
-                    }
-                }
-            }
-        }
+//        cell.photoImageView.image = nil
+    
+//        DispatchQueue.global().async {
+//            if let url = URL(string: photo.url) {
+//                Networking.fetchImage(url: url) { image in
+//                    DispatchQueue.main.sync {
+//                        cell.photoImageView.image = image
+//                    }
+//                }
+//            }
+//        }
+        
+        
+        // SDWebImage
+        guard let url = URL(string: photo.url) else { return cell }
+        
+        cell.photoImageView.sd_setImage(with: url)
         
         return cell
     }
@@ -55,10 +76,13 @@ class PhotosController: UICollectionViewController {
         collectionView.deselectItem(at: indexPath, animated: true)
         
         let layout = UICollectionViewFlowLayout()
-        let fullScreenPhotoVC = FullScreenPhotoController(collectionViewLayout: layout)
         layout.scrollDirection = .horizontal
-        fullScreenPhotoVC.photos = photos
+        let fullScreenPhotoVC = FullScreenPhotoController(collectionViewLayout: layout)
+        
+//        fullScreenPhotoVC.photos = photos
 //        fullScreenPhotoVC.indexPath = indexPath
+        fullScreenPhotoVC.ownerID = ownerID
+        
         navigationController?.pushViewController(fullScreenPhotoVC, animated: true)
     }
 }

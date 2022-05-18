@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import PromiseKit
 
 class FriendsController: UITableViewController {
     
@@ -73,11 +74,14 @@ class FriendsController: UITableViewController {
         let layout = UICollectionViewFlowLayout()
         let photosVC = PhotosController(collectionViewLayout: layout)
         navigationController?.pushViewController(photosVC, animated: true)
-        photosNetworkService.getAll(ownerID: friends[indexPath.row].id) { photos in
-            photosVC.photos = photos
-            DispatchQueue.main.async {
-                photosVC.collectionView.reloadData()
-            }
-        }
+        
+//        photosNetworkService.getAll(ownerID: friends[indexPath.row].id, photoType: PhotoTypeCases.p) { photos in
+//            photosVC.photos = photos
+//            DispatchQueue.main.async {
+//                photosVC.collectionView.reloadData()
+//            }
+//        }
+        
+        photosVC.ownerID = self.friends[indexPath.row].id
     }
 }

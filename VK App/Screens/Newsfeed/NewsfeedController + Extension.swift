@@ -7,6 +7,11 @@
 
 import UIKit
 
+//enum isLiked: Int {
+//    case notLiked = 0
+//    case liked = 1
+//}
+
 extension NewsfeedController {
     
     // MARK: - Functions
@@ -21,15 +26,26 @@ extension NewsfeedController {
     }
     
     /// Custom summary: Checking userLike for set up LikeControl
-    func checkUserLike(by state: Int, completion: @escaping(UIImage, UIColor) -> Void) {
-        switch state {
+    func checkUserLike(by news: NewsfeedStruct, cell: InteractionsCell, completion: @escaping(UIImage, UIColor) -> Void) {
+        switch news.userLikes {
         case 1:
-            guard let image = UIImage(systemName: "fill.heart") else { return }
+            guard let image = UIImage(systemName: "heart.fill") else { return }
             let color = UIColor.red
+            cell.likesControl.isLiked = news.userLikes
+            cell.likesControl.itemID = news.postID
+            if let accessKey = news.accessKey {
+                cell.likesControl.accessKey = accessKey
+            }
+            
             completion(image, color)
         default:
             guard let image = UIImage(systemName: "heart") else { return }
             let color = UIColor.systemGray2
+            cell.likesControl.isLiked = news.userLikes
+            cell.likesControl.itemID = news.postID
+            if let accessKey = news.accessKey {
+                cell.likesControl.accessKey = accessKey
+            }
             completion(image, color)
         }
     }
@@ -71,7 +87,7 @@ extension NewsfeedController {
     /// Custom summary: Configure images of news in newsfeed
     func configurePhotoCell(by news: NewsfeedStruct, indexPath: IndexPath) -> NewsfeedPhotoCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CellIdentifier.newsfeedPhotoCell.rawValue, for: indexPath) as? NewsfeedPhotoCell else { fatalError() }
-
+        
         DispatchQueue.global().async {
             if let stringURL = news.photoURL, let url = URL(string: stringURL) {
                 Networking.fetchImage(url: url) { image in
@@ -82,7 +98,7 @@ extension NewsfeedController {
                 }
             } else {
                 DispatchQueue.main.async {
-                    cell.photoImageView.image = nil
+                    cell.photoImageView.heightAnchor.constraint(equalToConstant: 0).isActive = true
                     cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
                 }
             }
@@ -100,7 +116,7 @@ extension NewsfeedController {
         cell.repostsControl.repostsCount.text = news.repostsCount.roundAndConvert()
         cell.viewsContentView.viewsCount.text = news.viewsCount.roundAndConvert()
         
-        checkUserLike(by: news.userLikes) { image, color in
+        checkUserLike(by: news, cell: cell) { image, color in
             cell.likesControl.likeImageView.image = image
             cell.likesControl.likeImageView.tintColor = color
             
@@ -112,6 +128,7 @@ extension NewsfeedController {
     /// Custom summary: Configure footer
     func configureFooterCell(indexPath: IndexPath) -> FooterCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CellIdentifier.footerCell.rawValue, for: indexPath) as? FooterCell else { fatalError() }
+        cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
         return cell
     }
     
@@ -127,4 +144,7 @@ extension NewsfeedController {
 //        guard let cell = tableView.cellForRow(at: indexPath) as? T else { return }
 //        completion(cell)
 //    }
+    
+    
+
 }

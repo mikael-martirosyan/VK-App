@@ -19,7 +19,6 @@ class ParseFriendsDataOperation: Operation {
         
         do {
             let result = try JSONDecoder().decode(FriendsGetResult.self, from: data)
-//            completion(result.response)
             self.outputData = result.response.items
         } catch {
             #warning("Обработать ошибки")

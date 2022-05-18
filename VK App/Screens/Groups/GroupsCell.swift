@@ -40,14 +40,14 @@ class GroupsCell: UITableViewCell {
     // MARK: - Cell setup
     
     private func setupConstraints() {
-        addSubview(avatar)
+        contentView.addSubview(avatar)
         avatar.translatesAutoresizingMaskIntoConstraints = false
         avatar.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10).isActive = true
         avatar.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         avatar.heightAnchor.constraint(equalToConstant: 50).isActive = true
         avatar.widthAnchor.constraint(equalToConstant: 50).isActive = true
     
-        addSubview(name)
+        contentView.addSubview(name)
         name.translatesAutoresizingMaskIntoConstraints = false
         name.leadingAnchor.constraint(equalTo: avatar.trailingAnchor, constant: 10).isActive = true
         name.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10).isActive = true

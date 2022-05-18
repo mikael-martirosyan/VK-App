@@ -47,7 +47,9 @@ class NewsfeedNetworkService {
                                                   commentsCount: item.comments.count ?? 0,
                                                   repostsCount: item.reposts.count ?? 0,
                                                   viewsCount: item.views?.count ?? 0,
-                                                  userLikes: item.likes.userLikes)
+                                                  userLikes: item.likes.userLikes,
+                                                  accessKey: nil
+                        )
                         
                         item.attachments?.forEach { attachments in
                             if let size = attachments.photo?.sizes.first(where: { $0.type == "x" }) {
@@ -55,6 +57,8 @@ class NewsfeedNetworkService {
                                 news.height = size.height
                                 news.width = size.width
                             }
+                            guard let accessKey = attachments.photo?.accessKey else { return print("NO ACCESS KEY") }
+                            news.accessKey = accessKey
                         }
 
                         if item.sourceID < 0,

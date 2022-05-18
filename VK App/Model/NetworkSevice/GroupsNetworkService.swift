@@ -6,11 +6,7 @@
 //
 
 import Foundation
-
-enum GruopsMethods: String {
-    case join
-    case leave
-}
+import PromiseKit
 
 class GroupsNetworkService {
     
@@ -32,13 +28,19 @@ class GroupsNetworkService {
                 // Обработать ошибки
                 print(error)
             } else if let data = data {
-                do {
-                    let response = try JSONDecoder().decode(GroupsGetResult.self, from: data).response
-                    completion(response)
-                } catch {
-                    fatalError("\(error)")
-                }
+                guard let groups = self.parseData(data: data) else { return }
+                completion(groups)
             }
+        }
+    }
+    
+    private func parseData(data: Data) -> GroupsGetResponse? {
+        do {
+            let response = try JSONDecoder().decode(GroupsGetResult.self, from: data).response
+            return response
+        } catch {
+            fatalError("\(error)")
+//            return nil
         }
     }
     
@@ -118,6 +120,42 @@ class GroupsNetworkService {
                     // Обработать ошибки
                     print(error)
                 }
+            }
+        }
+    }
+    
+    
+    // MARK: - Реализация метода /groups.get с помощью PromiseKit
+    
+    // Fetching data with PromiseKit
+    func fetchData() -> Promise<Data> {
+        return Promise<Data> { seal in
+            
+            let path = method + ".get"
+            
+            let methodQueryItems = [
+                URLQueryItem(name: "extended", value: "1"),
+                URLQueryItem(name: "fields", value: "name, photo_50")
+            ]
+            
+            Networking.request(path: path, optionItems: methodQueryItems) { data, error in
+                if let error = error {
+                    seal.reject(error)
+                } else if let data = data {
+                    seal.fulfill(data)
+                }
+            }
+        }
+    }
+    
+    // Parsing data with PromiseKit
+    func parseData(data: Data) -> Promise<GroupsGetResponse> {
+        return Promise<GroupsGetResponse> { seal in
+            do {
+                let response = try JSONDecoder().decode(GroupsGetResult.self, from: data).response
+                seal.fulfill(response)
+            } catch {
+                seal.reject(error)
             }
         }
     }

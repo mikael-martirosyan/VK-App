@@ -30,6 +30,12 @@ class LikesControl: UIControl {
         return label
     }()
     
+    let likesNetworkService = LikesNetworkService()
+    
+    var isLiked = 2
+    var itemID = 0
+    var accessKey = ""
+    
     // MARK: - Initializer
     
     override init(frame: CGRect) {
@@ -70,12 +76,25 @@ class LikesControl: UIControl {
     
     override func endTracking(_ touch: UITouch?, with event: UIEvent?) {
         
-        // Проверить наличие лайка у поста (likeIsLiked)
-        // Если 0 - добавить лайк (likesAdd), если 1 - удалить лайк (likesDelete)
+        #warning("Доделать добавление лайка")
         
-        let impactGenerator = UIImpactFeedbackGenerator(style: .medium)
-        impactGenerator.impactOccurred()
-        
-        
+//        if isLiked == 0 {
+//            likesNetworkService.add(itemID: itemID, accessKey: accessKey) { [weak self] like in
+//                guard let self = self else { return }
+//                self.isLiked = like
+//                DispatchQueue.main.sync {
+//                    self.likeImageView.image = UIImage(systemName: "heart.fill")
+//                    self.likeImageView.tintColor = .red
+//
+//                    let impactGenerator = UIImpactFeedbackGenerator(style: .medium)
+//                    impactGenerator.impactOccurred()
+//                }
+//            }
+//        } else if isLiked == 1 {
+//            print("Like deleted")
+//            isLiked = 0
+//            let impactGenerator = UIImpactFeedbackGenerator(style: .medium)
+//            impactGenerator.impactOccurred()
+//        }
     }
 }

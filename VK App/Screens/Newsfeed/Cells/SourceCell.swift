@@ -53,24 +53,24 @@ class SourceCell: UITableViewCell {
     }
     
     private func setupConstraints() {
-        addSubview(avatar)
+        contentView.addSubview(avatar)
         avatar.translatesAutoresizingMaskIntoConstraints = false
-        avatar.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        avatar.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10).isActive = true
+        avatar.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
+        avatar.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10).isActive = true
         avatar.heightAnchor.constraint(equalToConstant: 35).isActive = true
         avatar.widthAnchor.constraint(equalToConstant: 35).isActive = true
         
-        addSubview(name)
+        contentView.addSubview(name)
         name.translatesAutoresizingMaskIntoConstraints = false
-        name.topAnchor.constraint(equalTo: topAnchor, constant: 10).isActive = true
+        name.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10).isActive = true
         name.leadingAnchor.constraint(equalTo: avatar.trailingAnchor, constant: 10).isActive = true
-        name.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10).isActive = true
+        name.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10).isActive = true
         
-        addSubview(date)
+        contentView.addSubview(date)
         date.translatesAutoresizingMaskIntoConstraints = false
         date.topAnchor.constraint(equalTo: name.bottomAnchor).isActive = true
-        date.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10).isActive = true
+        date.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10).isActive = true
         date.leadingAnchor.constraint(equalTo: avatar.trailingAnchor, constant: 10).isActive = true
-        date.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10).isActive = true
+        date.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10).isActive = true
     }
 }
