@@ -49,6 +49,7 @@
 		0C9CF426282E9C8A00163F2B /* FetchFriendsDataOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C9CF425282E9C8A00163F2B /* FetchFriendsDataOperation.swift */; };
 		0C9CF428282E9CA900163F2B /* ParseFriendsDataOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C9CF427282E9CA900163F2B /* ParseFriendsDataOperation.swift */; };
 		0C9CF42A282E9CBA00163F2B /* ReloadTableViewControllerOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C9CF429282E9CBA00163F2B /* ReloadTableViewControllerOperation.swift */; };
+		0CB5AFBC2837E61600F705CA /* FileManagerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CB5AFBB2837E61600F705CA /* FileManagerService.swift */; };
 		0CB9321E281821FF009537AA /* FullScreenPhotoController + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CB9321D281821FF009537AA /* FullScreenPhotoController + Extension.swift */; };
 		0CCD2AA7280F11B3009F61CA /* CGFloat + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CCD2AA6280F11B3009F61CA /* CGFloat + Extension.swift */; };
 		0CCD2AAE280F1B01009F61CA /* GroupSearchController + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CCD2AAD280F1B01009F61CA /* GroupSearchController + Extension.swift */; };
@@ -117,6 +118,7 @@
 		0C9CF425282E9C8A00163F2B /* FetchFriendsDataOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchFriendsDataOperation.swift; sourceTree = "<group>"; };
 		0C9CF427282E9CA900163F2B /* ParseFriendsDataOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParseFriendsDataOperation.swift; sourceTree = "<group>"; };
 		0C9CF429282E9CBA00163F2B /* ReloadTableViewControllerOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReloadTableViewControllerOperation.swift; sourceTree = "<group>"; };
+		0CB5AFBB2837E61600F705CA /* FileManagerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerService.swift; sourceTree = "<group>"; };
 		0CB9321D281821FF009537AA /* FullScreenPhotoController + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FullScreenPhotoController + Extension.swift"; sourceTree = "<group>"; };
 		0CCD2AA6280F11B3009F61CA /* CGFloat + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGFloat + Extension.swift"; sourceTree = "<group>"; };
 		0CCD2AAD280F1B01009F61CA /* GroupSearchController + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GroupSearchController + Extension.swift"; sourceTree = "<group>"; };
@@ -461,6 +463,7 @@
 		0CEE7A7A27F45E090097F3C0 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				0CB5AFBB2837E61600F705CA /* FileManagerService.swift */,
 				0CEE7A7D27F45E610097F3C0 /* NetworkSevice */,
 				0CEE7A7E27F45E8C0097F3C0 /* Responses */,
 				0CEE7A8127F462B00097F3C0 /* Session.swift */,
@@ -583,6 +586,7 @@
 				0C83EE012811989F00A3D688 /* PhotosController.swift in Sources */,
 				0C8D39D1280B4C6000C235FD /* InteractionsCell.swift in Sources */,
 				0C35C2FE27F8AC4400173853 /* RepostsControl.swift in Sources */,
+				0CB5AFBC2837E61600F705CA /* FileManagerService.swift in Sources */,
 				0C8D39CA280B16ED00C235FD /* SourceCell.swift in Sources */,
 				0C9CF426282E9C8A00163F2B /* FetchFriendsDataOperation.swift in Sources */,
 				0CEE7A6A27F393350097F3C0 /* OldNewsfeedController.swift in Sources */,
