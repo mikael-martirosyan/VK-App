@@ -15,6 +15,7 @@ class SourceCell: UITableViewCell {
         let imageView = UIImageView()
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFill
+        imageView.backgroundColor = .systemBackground
         return imageView
     }()
     
@@ -22,6 +23,7 @@ class SourceCell: UITableViewCell {
         let label = UILabel()
         label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 15, weight: .medium)
+        label.backgroundColor = .systemBackground
         return label
     }()
     
@@ -29,6 +31,7 @@ class SourceCell: UITableViewCell {
         let label = UILabel()
         label.textColor = .systemGray2
         label.font = UIFont.systemFont(ofSize: 12, weight: .semibold)
+        label.backgroundColor = .systemBackground
         return label
     }()
     

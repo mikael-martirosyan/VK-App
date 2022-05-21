@@ -16,6 +16,7 @@ class CommentsControl: UIControl {
         imageView.image = UIImage(systemName: "bubble.left")
         imageView.contentMode = .scaleAspectFit
         imageView.tintColor = .systemGray2
+        imageView.backgroundColor = .systemBackground
         return imageView
     }()
     
@@ -23,6 +24,7 @@ class CommentsControl: UIControl {
         let label = UILabel()
         label.textColor = .systemGray2
         label.font = UIFont.systemFont(ofSize: 13, weight: .medium)
+        label.backgroundColor = .systemBackground
         return label
     }()
     

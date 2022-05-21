@@ -17,6 +17,7 @@ class TextCell: UITableViewCell {
         label.font = UIFont.systemFont(ofSize: 15)
         label.numberOfLines = 0
         label.textAlignment = .left
+        label.backgroundColor = .systemBackground
         return label
     }()
     

@@ -20,6 +20,7 @@ class LikesControl: UIControl {
     let likeImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
+        imageView.backgroundColor = .systemBackground
         return imageView
     }()
     
@@ -27,6 +28,7 @@ class LikesControl: UIControl {
         let label = UILabel()
         label.textColor = .systemGray2
         label.font = UIFont.systemFont(ofSize: 13, weight: .medium)
+        label.backgroundColor = .systemBackground
         return label
     }()
     

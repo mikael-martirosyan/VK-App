@@ -9,7 +9,7 @@ import Foundation
 
 extension DateFormatter {
     /// Custom summary: set up custom date format (ex.: 1 January, 00:00)
-    var dateFormatter: DateFormatter {
+    static var dateFormatter: DateFormatter {
         get {
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "d MMMM, HH:mm"
@@ -20,7 +20,7 @@ extension DateFormatter {
     /// Custom summary: convert date from Double type to String
     static func getStringDate(date: Double) -> String {
         let date = Date(timeIntervalSince1970: date)
-        let stringDate = DateFormatter().dateFormatter.string(from: date)
+        let stringDate = DateFormatter.dateFormatter.string(from: date)
         return stringDate
     }
 }
