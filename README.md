@@ -1,8 +1,19 @@
-# VK-App
+# VK App
 
-## Standalone приложение, работающее с API VK. 
+## VK App – клиент-серверное Standalone-приложение, для работы с социальной сетью VK.
 Разрабатывается в рамках I четверти обучения на факультете iOS-разработки образовательного портала GeekBrains.
 Текущий курс 3: Производительность iOS-приложений.
+
+**Стек:**
+• Среда разработки: Xcode;
+• Язык программирования: Swift;
+• UI: AutoLayout, верстка кодом;
+• Хранение данных: FileManager (кеширование);
+• Многопоточность: GCD, Operation, PromiseKit;
+• Frameworks: Alamofire, Foundation, PromiseKit, SwiftyJSON, UIKit, WebKit;
+• API: URLSession, GCD, Operation;
+• REST API: VK API;
+• Менеджер зависимостей: Swift Package Manager.
 
 ### Задания к уроку №1 (Тема: Параллельное программирование. Thread):
 
