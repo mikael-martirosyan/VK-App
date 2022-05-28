@@ -15,6 +15,7 @@ class FriendsCell: UITableViewCell {
        let imageView = UIImageView()
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFill
+        imageView.backgroundColor = .systemBackground
         return imageView
     }()
     
@@ -22,6 +23,7 @@ class FriendsCell: UITableViewCell {
         let label = UILabel()
         label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 17)
+        label.backgroundColor = .systemBackground
         return label
     }()
     
