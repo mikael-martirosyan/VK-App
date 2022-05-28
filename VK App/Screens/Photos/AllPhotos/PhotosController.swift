@@ -7,7 +7,7 @@
 
 import UIKit
 import PromiseKit
-import SDWebImage
+//import SDWebImage
 
 class PhotosController: UICollectionViewController {
     
@@ -16,6 +16,7 @@ class PhotosController: UICollectionViewController {
     private let networkService = PhotosNetworkService()
     var ownerID = 0
     var photos = [PhotosStruct]()
+    let fileManagerService = FileManagerService()
     
     let cellsPerRow: CGFloat = 3
     let insets = UIEdgeInsets(top: 2.0, left: 2.0, bottom: 2.0, right: 2.0)
@@ -47,10 +48,24 @@ class PhotosController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CellIdentifier.photosCell.rawValue, for: indexPath) as? PhotosCell else { return UICollectionViewCell() }
         
-        let photo = photos[indexPath.item]
+        let photoURL = photos[indexPath.item].url
         
-//        cell.photoImageView.image = nil
-    
+        // С сохранением в кеш
+        if let photoFromCache = self.fileManagerService.getImageFromCache(url: photoURL) {
+            DispatchQueue.main.async {
+                cell.photoImageView.image = photoFromCache
+            }
+        } else if let url = URL(string: photoURL) {
+            Networking.fetchImage(url: url) { [weak self] image in
+                guard let self  = self else { return }
+                self.fileManagerService.saveImageToCache(url: photoURL, image: image)
+                DispatchQueue.main.async {
+                    cell.photoImageView.image = image
+                }
+            }
+        }
+        
+        // Без сохранения в кеш
 //        DispatchQueue.global().async {
 //            if let url = URL(string: photo.url) {
 //                Networking.fetchImage(url: url) { image in
@@ -61,11 +76,9 @@ class PhotosController: UICollectionViewController {
 //            }
 //        }
         
-        
-        // SDWebImage
-        guard let url = URL(string: photo.url) else { return cell }
-        
-        cell.photoImageView.sd_setImage(with: url)
+        // С сохранением в кеш с помощью SDWebImage
+//        guard let url = URL(string: photoURL) else { return cell }
+//        cell.photoImageView.sd_setImage(with: url)
         
         return cell
     }

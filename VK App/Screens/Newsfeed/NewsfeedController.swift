@@ -31,6 +31,8 @@ class NewsfeedController: UITableViewController {
                 self.tableView.reloadData()
             }
         }
+        
+        print(NSHomeDirectory())
     }
     
     // MARK: - Table view data source
