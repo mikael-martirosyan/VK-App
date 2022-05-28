@@ -35,12 +35,12 @@ class TextCell: UITableViewCell {
     // MARK: - Cell setup
     
     private func setupConstraints() {
-        addSubview(message)
+        contentView.addSubview(message)
         message.translatesAutoresizingMaskIntoConstraints = false
-        message.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        message.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10).isActive = true
-        message.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10).isActive = true
-        message.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10).isActive = true
+        message.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
+        message.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10).isActive = true
+        message.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10).isActive = true
+        message.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10).isActive = true
         guard let text = message.text else { return }
         message.heightAnchor.constraint(equalToConstant: text.height(withConstrainedWidth: message.frame.width, font: message.font)).isActive = true
     }

@@ -12,7 +12,7 @@ class Session {
     
     private init() {}
     
-    #warning("Спрятать токен в KeyChain или UserDefault")
+    #warning("Спрятать токен в KeyChain или UserDefaults")
     var userID: String?
     var token: String?
 }

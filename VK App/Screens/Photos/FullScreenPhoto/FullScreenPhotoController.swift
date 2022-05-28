@@ -11,7 +11,9 @@ class FullScreenPhotoController: UICollectionViewController {
     
     // MARK: - Properties
     
+    private let networkService = PhotosNetworkService()
     var photos = [PhotosStruct]()
+    var ownerID = 0
 //    var indexPath: IndexPath? = nil
     
     // MARK: - viewDidLoad
@@ -22,6 +24,15 @@ class FullScreenPhotoController: UICollectionViewController {
         self.collectionView.register(FullScreenPhotoCell.self, forCellWithReuseIdentifier: CellIdentifier.fullScreenPhotoCell.rawValue)
 
         collectionView.isPagingEnabled = true
+        
+        DispatchQueue.global().async {
+            self.networkService.getAll(ownerID: self.ownerID, photoType: PhotoTypeCases.x) { photos in
+                self.photos = photos
+                DispatchQueue.main.async {
+                    self.collectionView.reloadData()
+                }
+            }
+        }
 
         #warning("Исправить работу функции и проверить, почему ImageView показывается выше, до скролла")
 //        collectionView.performBatchUpdates(nil) { [weak self] _ in

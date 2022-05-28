@@ -103,6 +103,7 @@ struct Photo: Decodable {
     let sizes: [NewsfeedPhotoSize]
 //    let text: String
 //    let userID: Int
+    let accessKey: String
 
     enum CodingKeys: String, CodingKey {
 //        case albumID = "album_id"
@@ -112,6 +113,7 @@ struct Photo: Decodable {
 //        case postID = "post_id"
         case sizes //, text
 //        case userID = "user_id"
+        case accessKey = "access_key"
     }
 }
 

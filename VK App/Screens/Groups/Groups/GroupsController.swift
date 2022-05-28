@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import PromiseKit
 
 class GroupsController: UITableViewController {
     
@@ -25,12 +26,24 @@ class GroupsController: UITableViewController {
         
         tableView.register(GroupsCell.self, forCellReuseIdentifier: CellIdentifier.groupsCell.rawValue)
         
-        networkService.get { [weak self] response in
-            guard let self = self else { return }
-            self.groups = response.items
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-            }
+//        networkService.get { [weak self] response in
+//            guard let self = self else { return }
+//            self.groups = response.items
+//            DispatchQueue.main.async {
+//                self.tableView.reloadData()
+//            }
+//        }
+        
+        // Fetching data with PromiseKit
+        firstly {
+            networkService.fetchData()
+        }.then { data in
+            self.networkService.parseData(data: data)
+        }.done { groups in
+            self.groups = groups.items
+            self.tableView.reloadData()
+        }.catch { error in
+            print(error)
         }
     }
     
@@ -51,13 +64,24 @@ class GroupsController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CellIdentifier.groupsCell.rawValue, for: indexPath) as? GroupsCell else { return UITableViewCell() }
         
-        DispatchQueue.global().async {
-            if let url = URL(string: self.groups[indexPath.row].photo50) {
-                Networking.fetchImage(url: url) { image in
-                    DispatchQueue.main.async {
-                        cell.avatar.image = image
-                    }
-                }
+//        DispatchQueue.global().async {
+//            if let url = URL(string: self.groups[indexPath.row].photo50) {
+//                Networking.fetchImage(url: url) { image in
+//                    DispatchQueue.main.async {
+//                        cell.avatar.image = image
+//                    }
+//                }
+//            }
+//        }
+        
+        // Fetching image with PromiseKit
+        if let url = URL(string: self.groups[indexPath.row].photo50) {
+            firstly {
+                Networking.fetchImage(url: url)
+            }.done { image in
+                cell.avatar.image = image
+            }.catch { error in
+                print(error)
             }
         }
 

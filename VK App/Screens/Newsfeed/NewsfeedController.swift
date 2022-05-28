@@ -12,7 +12,8 @@ class NewsfeedController: UITableViewController {
     // MARK: - Properties
     
     var newsList = [NewsfeedStruct]()
-    let networkService = NewsfeedNetworkService()
+    let newsfeedNetworkService = NewsfeedNetworkService()
+    let likesNetworkService = LikesNetworkService()
     
     // MARK: - viewDidLoad
 
@@ -23,14 +24,14 @@ class NewsfeedController: UITableViewController {
         title = Title.news.rawValue
         registerCells()
 
-        networkService.get { [weak self] response in
+        newsfeedNetworkService.get { [weak self] response in
             guard let self = self else { return }
             self.newsList = response
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }
         }
-}
+    }
     
     // MARK: - Table view data source
 

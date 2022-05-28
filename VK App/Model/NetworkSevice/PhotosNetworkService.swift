@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import PromiseKit
 
 class PhotosNetworkService {
     
@@ -13,7 +14,7 @@ class PhotosNetworkService {
     
     // MARK: - .getAll
     
-    func getAll(ownerID: Int, completion: @escaping ([PhotosStruct]) -> Void) {
+    func getAll(ownerID: Int, photoType: PhotoTypeCases, completion: @escaping ([PhotosStruct]) -> Void) {
         
         let path = method + ".getAll"
         
@@ -29,24 +30,30 @@ class PhotosNetworkService {
                 // Обработать ошибки
                 print(error)
             } else if let data = data {
-                do {
-                    let result = try JSONDecoder().decode(PhotosGetAllResult.self, from: data)
-                    
-                    var photos = [PhotosStruct]()
-                
-                    for item in result.response.items {
-                        var photo = PhotosStruct(id: item.id, ownerID: item.ownerID, url: "")
-                        if let size = item.sizes.first(where: { $0.type == "x" }) {
-                            photo.url = size.url
-                        }
-                        photos.append(photo)
-                    }
-                    
-                    completion(photos)
-                } catch {
-                    print(error)
-                }
+                guard let photos = self.parseData(data: data, photoType: photoType) else { return }
+                completion(photos)
             }
+        }
+    }
+    
+    private func parseData(data: Data, photoType: PhotoTypeCases) -> [PhotosStruct]? {
+        do {
+            let result = try JSONDecoder().decode(PhotosGetAllResult.self, from: data)
+            
+            var photos = [PhotosStruct]()
+        
+            for item in result.response.items {
+                var photo = PhotosStruct(id: item.id, ownerID: item.ownerID, url: "")
+                if let size = item.sizes.first(where: { $0.type == photoType.rawValue }) {
+                    photo.url = size.url
+                }
+                photos.append(photo)
+            }
+            
+            return photos
+        } catch {
+            print(error)
+            return nil
         }
     }
 }

@@ -22,4 +22,5 @@ struct NewsfeedStruct {
     var repostsCount: Int
     var viewsCount: Int
     var userLikes: Int
+    var accessKey: String?
 }
