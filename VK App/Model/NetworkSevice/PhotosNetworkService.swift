@@ -6,40 +6,46 @@
 //
 
 import Foundation
-import Alamofire
 
 class PhotosNetworkService {
     
-    private let baseURL = "https://api.vk.com/method/photos"
-    private let session = Session.shared
-    private let version = "5.131"
+    private let method = "/photos"
     
     // MARK: - .getAll
     
-    func getAll(ownerID: Int, completion: @escaping ([PhotosGetAllItem]) -> Void) {
+    func getAll(ownerID: Int, completion: @escaping ([PhotosStruct]) -> Void) {
         
-        let path = ".getAll"
-        let url = baseURL + path
+        let path = method + ".getAll"
         
-        guard let token = session.token else { return }
-        
-        let params: Parameters = [
-            "owner_id": ownerID,
-            "count": 100,
-            "photo_sizes": 1,
-            "access_token": token,
-            "v": version
+        let methodQueryItems = [
+            URLQueryItem(name: "owner_id", value: String(ownerID)),
+            URLQueryItem(name: "count", value: "100"),
+            URLQueryItem(name: "photo_sizes", value: "1")
         ]
         
-        AF.request(url, method: .get, parameters: params).responseData { response in
-            guard let data = response.value else { return }
-            
-            do {
-                let response = try JSONDecoder().decode(PhotosGetAllResult.self, from: data).response
-                
-                completion(response.items)
-            } catch {
+        Networking.request(path: path, optionItems: methodQueryItems) { data, error in
+            if let error = error {
+                #warning("Обработать ошибки")
+                // Обработать ошибки
                 print(error)
+            } else if let data = data {
+                do {
+                    let result = try JSONDecoder().decode(PhotosGetAllResult.self, from: data)
+                    
+                    var photos = [PhotosStruct]()
+                
+                    for item in result.response.items {
+                        var photo = PhotosStruct(id: item.id, ownerID: item.ownerID, url: "")
+                        if let size = item.sizes.first(where: { $0.type == "x" }) {
+                            photo.url = size.url
+                        }
+                        photos.append(photo)
+                    }
+                    
+                    completion(photos)
+                } catch {
+                    print(error)
+                }
             }
         }
     }

@@ -56,8 +56,6 @@ class SourceCell: UITableViewCell {
         addSubview(avatar)
         avatar.translatesAutoresizingMaskIntoConstraints = false
         avatar.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-//        avatar.topAnchor.constraint(equalTo: topAnchor, constant: 10).isActive = true
-//        avatar.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10).isActive = true
         avatar.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10).isActive = true
         avatar.heightAnchor.constraint(equalToConstant: 35).isActive = true
         avatar.widthAnchor.constraint(equalToConstant: 35).isActive = true

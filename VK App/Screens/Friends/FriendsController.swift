@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Alamofire
 
 class FriendsController: UITableViewController {
     
@@ -14,9 +13,9 @@ class FriendsController: UITableViewController {
     
     private let friendsNetworkService = FriendsNetworkService()
     private let photosNetworkService = PhotosNetworkService()
-    private var friends = [FriendsGetItem]()
+    var friends = [FriendsGetItem]()
     
-    // MARK: - viewDidLoad
+    // MARK: - Life Cycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,11 +25,17 @@ class FriendsController: UITableViewController {
         
         tableView.register(FriendsCell.self, forCellReuseIdentifier: CellIdentifier.friendsCell.rawValue)
         
-        friendsNetworkService.get { [weak self] response in
-            guard let self = self else { return }
-            self.friends = response.items
-            self.tableView.reloadData()
-        }
+        // Получение данных с использованием DispatchQueue
+//        friendsNetworkService.get { [weak self] response in
+//            guard let self = self else { return }
+//            self.friends = response.items
+//            DispatchQueue.main.sync {
+//                self.tableView.reloadData()
+//            }
+//        }
+        
+        // Получение данных с использованием Operation
+        chainOfOperations()
     }
 
     // MARK: - Table view data source
@@ -38,14 +43,17 @@ class FriendsController: UITableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return friends.count
     }
-
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CellIdentifier.friendsCell.rawValue, for: indexPath) as? FriendsCell else { return UITableViewCell() }
         
-        if let url = URL(string: friends[indexPath.row].photo50) {
-            FetchImage.fetchImage(url: url) { image in
-                cell.avatar.image = image
+        DispatchQueue.global().async {
+            if let url = URL(string: self.friends[indexPath.row].photo50) {
+                Networking.fetchImage(url: url) { image in
+                    DispatchQueue.main.async {
+                        cell.avatar.image = image
+                    }
+                }
             }
         }
         
@@ -65,9 +73,11 @@ class FriendsController: UITableViewController {
         let layout = UICollectionViewFlowLayout()
         let photosVC = PhotosController(collectionViewLayout: layout)
         navigationController?.pushViewController(photosVC, animated: true)
-        photosNetworkService.getAll(ownerID: friends[indexPath.row].id) { response in
-            photosVC.photos = response
-            photosVC.collectionView.reloadData()
+        photosNetworkService.getAll(ownerID: friends[indexPath.row].id) { photos in
+            photosVC.photos = photos
+            DispatchQueue.main.async {
+                photosVC.collectionView.reloadData()
+            }
         }
     }
 }

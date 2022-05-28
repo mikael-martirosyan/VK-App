@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Alamofire
 
 class GroupsSearchController: UITableViewController {
     
@@ -49,9 +48,13 @@ class GroupsSearchController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CellIdentifier.groupsCell.rawValue, for: indexPath) as? GroupsCell else { return UITableViewCell() }
         
-        if let url = URL(string: groupSearch[indexPath.row].photo50) {
-            FetchImage.fetchImage(url: url) { image in
-                cell.avatar.image = image
+        DispatchQueue.global().async {
+            if let url = URL(string: self.groupSearch[indexPath.row].photo50) {
+                Networking.fetchImage(url: url) { image in
+                    DispatchQueue.main.async {
+                        cell.avatar.image = image
+                    }
+                }
             }
         }
 
@@ -74,7 +77,6 @@ class GroupsSearchController: UITableViewController {
         return true
     }
     
-    #warning("Исправить работу поиска")
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         let newGroup = groupSearch[indexPath.row]
         if editingStyle == .insert {
@@ -86,6 +88,8 @@ class GroupsSearchController: UITableViewController {
                 
                 alert.addAction(action)
                 present(alert, animated: true)
+                
+                #warning("Добавить alert об ошибке добавления")
             }
         }
     }

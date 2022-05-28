@@ -11,6 +11,7 @@ extension GroupsSearchController: UISearchBarDelegate {
     
     // MARK: - Set up search bar
     
+    #warning("Исправить работу поиска")
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
 //        if searchText != "" {
             print("Text status before searching: \(searchText.isEmpty)")
@@ -21,7 +22,9 @@ extension GroupsSearchController: UISearchBarDelegate {
                     self.groupSearch = response.items
                     print("Array after searching: \(self.groupSearch)")
                     print(searchText)
-                    self.tableView.reloadData()
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
+                    }
                 }
 //            }
 //        } else {

@@ -31,6 +31,6 @@ struct PhotosGetAllItem: Decodable {
 struct PhotoGetAllSize: Decodable {
     let url: String
     let type: String
-    let width: Int
-    let height: Int
+//    let width: Int
+//    let height: Int
 }

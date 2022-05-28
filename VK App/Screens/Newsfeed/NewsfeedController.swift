@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Alamofire
 
 class NewsfeedController: UITableViewController {
     
@@ -27,9 +26,11 @@ class NewsfeedController: UITableViewController {
         networkService.get { [weak self] response in
             guard let self = self else { return }
             self.newsList = response
-            self.tableView.reloadData()
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
         }
-    }
+}
     
     // MARK: - Table view data source
 
@@ -38,15 +39,15 @@ class NewsfeedController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return PostStruct.allCases.count
+        return SectionCellsEnum.allCases.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let news = newsList[indexPath.section]
-        let postStruct = PostStruct(rawValue: indexPath.row)
+        let sectionCellsEnum = SectionCellsEnum(rawValue: indexPath.row)
         
-        switch postStruct {
+        switch sectionCellsEnum {
         case .source:
             return configureSourceCell(by: news, indexPath: indexPath)
         case .text:
@@ -55,24 +56,14 @@ class NewsfeedController: UITableViewController {
             return configurePhotoCell(by: news, indexPath: indexPath)
         case .interactions:
             return configureInteractionsCell(by: news, indexPath: indexPath)
+        case .footer:
+            return configureFooterCell(indexPath: indexPath)
         default:
             return UITableViewCell()
         }
     }
     
     // MARK: - Table view delegate
-    
-    #warning("Заменить footer на view")
-    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let view = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 5))
-        view.backgroundColor = .gray
-        view.alpha = 0.1
-        return view
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 10
-    }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         return tableView.deselectRow(at: indexPath, animated: false)

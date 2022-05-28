@@ -6,14 +6,13 @@
 //
 
 import UIKit
-import Alamofire
 
 class PhotosController: UICollectionViewController {
     
     // MARK: - Properties
     
     private let networkService = PhotosNetworkService()
-    var photos = [PhotosGetAllItem]()
+    var photos = [PhotosStruct]()
     
     let cellsPerRow: CGFloat = 3
     let insets = UIEdgeInsets(top: 2.0, left: 2.0, bottom: 2.0, right: 2.0)
@@ -35,12 +34,12 @@ class PhotosController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CellIdentifier.photosCell.rawValue, for: indexPath) as? PhotosCell else { return UICollectionViewCell() }
         
-        let sizes = photos[indexPath.row].sizes
+        let photo = photos[indexPath.item]
         
-        for size in sizes {
-            if size.type == "x" {
-                if let url = URL(string: size.url) {
-                    FetchImage.fetchImage(url: url) { image in
+        DispatchQueue.global().async {
+            if let url = URL(string: photo.url) {
+                Networking.fetchImage(url: url) { image in
+                    DispatchQueue.main.sync {
                         cell.photoImageView.image = image
                     }
                 }
@@ -59,7 +58,7 @@ class PhotosController: UICollectionViewController {
         let fullScreenPhotoVC = FullScreenPhotoController(collectionViewLayout: layout)
         layout.scrollDirection = .horizontal
         fullScreenPhotoVC.photos = photos
-        fullScreenPhotoVC.indexPath = indexPath
+//        fullScreenPhotoVC.indexPath = indexPath
         navigationController?.pushViewController(fullScreenPhotoVC, animated: true)
     }
 }
