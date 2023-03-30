@@ -5,10 +5,11 @@
 //  Created by Микаэл Мартиросян on 12.05.2022.
 //
 
-import Foundation
+import UIKit
 
 struct PhotosStruct {
     var id: Int
     var ownerID: Int
     var url: String
+    var aspectRatio: CGFloat
 }

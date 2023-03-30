@@ -19,7 +19,7 @@ class InteractionsCell: UITableViewCell {
     // MARK: - Initializer
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: CellIdentifier.interactionsCell.rawValue)
+        super.init(style: style, reuseIdentifier: InteractionsCell.reuseID)
         
         setupConstraints()
     }

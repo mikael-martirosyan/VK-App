@@ -16,12 +16,12 @@ class FullScreenPhotoController: UICollectionViewController {
     var ownerID = 0
 //    var indexPath: IndexPath? = nil
     
-    // MARK: - viewDidLoad
+    // MARK: - Life Cycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.collectionView.register(FullScreenPhotoCell.self, forCellWithReuseIdentifier: CellIdentifier.fullScreenPhotoCell.rawValue)
+        self.collectionView.registerCell(FullScreenPhotoCell.self)
 
         collectionView.isPagingEnabled = true
         
@@ -52,7 +52,7 @@ class FullScreenPhotoController: UICollectionViewController {
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CellIdentifier.fullScreenPhotoCell.rawValue, for: indexPath) as? FullScreenPhotoCell else { return UICollectionViewCell() }
+        let cell = collectionView.dequeueReusableCell(forIndexPath: indexPath) as FullScreenPhotoCell
         
         let photo = photos[indexPath.item]
         

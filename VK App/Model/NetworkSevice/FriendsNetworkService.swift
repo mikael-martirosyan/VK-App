@@ -5,7 +5,6 @@
 //  Created by Микаэл Мартиросян on 31.03.2022.
 //
 
-import Foundation
 import UIKit
 
 class FriendsNetworkService {

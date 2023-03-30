@@ -16,7 +16,7 @@ class GroupsSearchController: UITableViewController {
 //    private let groupsController = GroupsController()
     private var timer: Timer?
     
-    // MARK: - viewDidLoad
+    // MARK: - Life Cycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,7 +29,7 @@ class GroupsSearchController: UITableViewController {
     private func setupConfig() {
         view.backgroundColor = .systemBackground
         
-        tableView.register(GroupsCell.self, forCellReuseIdentifier: CellIdentifier.groupsCell.rawValue)
+        tableView.registerCell(UniversalTableViewCell.self)
         
         let searchController = UISearchController(searchResultsController: nil)
         searchController.searchBar.delegate = self
@@ -46,19 +46,19 @@ class GroupsSearchController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: CellIdentifier.groupsCell.rawValue, for: indexPath) as? GroupsCell else { return UITableViewCell() }
+        let cell = tableView.dequeueReusableCell(forIndexPath: indexPath) as UniversalTableViewCell
         
         DispatchQueue.global().async {
             if let url = URL(string: self.groupSearch[indexPath.row].photo50) {
                 Networking.fetchImage(url: url) { image in
                     DispatchQueue.main.async {
-                        cell.avatar.image = image
+                        cell.avatarImageView.image = image
                     }
                 }
             }
         }
 
-        cell.name.text = groupSearch[indexPath.row].name
+        cell.nameLabel.text = groupSearch[indexPath.row].name
         
         return cell
     }

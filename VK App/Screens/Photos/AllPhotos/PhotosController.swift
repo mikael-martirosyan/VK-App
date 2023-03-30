@@ -21,12 +21,12 @@ class PhotosController: UICollectionViewController {
     let cellsPerRow: CGFloat = 3
     let insets = UIEdgeInsets(top: 2.0, left: 2.0, bottom: 2.0, right: 2.0)
     
-    // MARK: - viewDidLoad
+    // MARK: - Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.collectionView.register(PhotosCell.self, forCellWithReuseIdentifier: CellIdentifier.photosCell.rawValue)
+        self.collectionView.registerCell(PhotosCell.self)
         
         DispatchQueue.global().async {
             self.networkService.getAll(ownerID: self.ownerID, photoType: PhotoTypeCases.q) { [weak self] photos in
@@ -46,7 +46,7 @@ class PhotosController: UICollectionViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CellIdentifier.photosCell.rawValue, for: indexPath) as? PhotosCell else { return UICollectionViewCell() }
+        let cell = collectionView.dequeueReusableCell(forIndexPath: indexPath) as PhotosCell
         
         let photoURL = photos[indexPath.item].url
         

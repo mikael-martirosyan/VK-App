@@ -15,24 +15,39 @@ class NewsfeedController: UITableViewController {
     let newsfeedNetworkService = NewsfeedNetworkService()
     let likesNetworkService = LikesNetworkService()
     
-    // MARK: - viewDidLoad
+    let refControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.tintColor = .systemGray
+        refreshControl.addTarget(self, action: #selector(refreshNewsfeed(sender:)), for: .valueChanged)
+        return refreshControl
+    }()
+    
+    var nextFrom = ""
+    var isLoading = false
+    
+    // MARK: - Life Cycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.backgroundColor = .systemBackground
-        title = Title.news.rawValue
-        registerCells()
+        setupConfig()
 
         newsfeedNetworkService.get { [weak self] response in
-            guard let self = self else { return }
+            guard let self = self,
+                  let nextFrom = response.first?.nextFrom
+            else { return }
             self.newsList = response
+            self.nextFrom = nextFrom
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }
         }
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
         
-        print(NSHomeDirectory())
+        
     }
     
     // MARK: - Table view data source
@@ -46,8 +61,8 @@ class NewsfeedController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         let news = newsList[indexPath.section]
+        
         let sectionCellsEnum = SectionCellsEnum(rawValue: indexPath.row)
         
         switch sectionCellsEnum {
@@ -70,5 +85,23 @@ class NewsfeedController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         return tableView.deselectRow(at: indexPath, animated: false)
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let sectionCellsEnum = SectionCellsEnum(rawValue: indexPath.row)
+        
+        switch sectionCellsEnum {
+        case .photo:
+            let tableWidth = tableView.bounds.width
+            guard let aspectRatio = newsList[indexPath.section].aspectRatio else { return 0 }
+            let height = tableWidth * aspectRatio
+            return height
+        case .footer:
+            return 10
+        case .text:
+            return UITableView.automaticDimension
+        default:
+            return UITableView.automaticDimension
+        }
     }
 }

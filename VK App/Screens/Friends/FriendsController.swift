@@ -9,11 +9,10 @@ import UIKit
 import PromiseKit
 
 class FriendsController: UITableViewController {
-    
+        
     // MARK: - Properties
     
     private let friendsNetworkService = FriendsNetworkService()
-    private let photosNetworkService = PhotosNetworkService()
     var friends = [FriendsGetItem]()
     
     // MARK: - Life Cycle
@@ -24,7 +23,7 @@ class FriendsController: UITableViewController {
         view.backgroundColor = .systemBackground
         navigationItem.title = Title.friends.rawValue
         
-        tableView.register(FriendsCell.self, forCellReuseIdentifier: CellIdentifier.friendsCell.rawValue)
+        tableView.registerCell(UniversalTableViewCell.self)
         
         // Получение данных с использованием DispatchQueue
 //        friendsNetworkService.get { [weak self] response in
@@ -46,19 +45,20 @@ class FriendsController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: CellIdentifier.friendsCell.rawValue, for: indexPath) as? FriendsCell else { return UITableViewCell() }
+
+        let cell = tableView.dequeueReusableCell(forIndexPath: indexPath) as UniversalTableViewCell
         
         DispatchQueue.global().async {
             if let url = URL(string: self.friends[indexPath.row].photo50) {
                 Networking.fetchImage(url: url) { image in
                     DispatchQueue.main.async {
-                        cell.avatar.image = image
+                        cell.avatarImageView.image = image
                     }
                 }
             }
         }
         
-        cell.name.text = friends[indexPath.row].fullName
+        cell.nameLabel.text = friends[indexPath.row].fullName
 
         return cell
     }
@@ -74,14 +74,6 @@ class FriendsController: UITableViewController {
         let layout = UICollectionViewFlowLayout()
         let photosVC = PhotosController(collectionViewLayout: layout)
         navigationController?.pushViewController(photosVC, animated: true)
-        
-//        photosNetworkService.getAll(ownerID: friends[indexPath.row].id, photoType: PhotoTypeCases.p) { photos in
-//            photosVC.photos = photos
-//            DispatchQueue.main.async {
-//                photosVC.collectionView.reloadData()
-//            }
-//        }
-        
         photosVC.ownerID = self.friends[indexPath.row].id
     }
 }

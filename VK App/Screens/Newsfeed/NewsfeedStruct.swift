@@ -5,7 +5,7 @@
 //  Created by Микаэл Мартиросян on 13.05.2022.
 //
 
-import Foundation
+import UIKit
 
 struct NewsfeedStruct {
     var sourceID: Int
@@ -17,10 +17,12 @@ struct NewsfeedStruct {
     var photoURL: String?
     var height: Int?
     var width: Int?
+    var aspectRatio: CGFloat?
     var likesCount: Int
     var commentsCount: Int
     var repostsCount: Int
     var viewsCount: Int
     var userLikes: Int
-    var accessKey: String?
+//    var accessKey: String?
+    var nextFrom: String
 }

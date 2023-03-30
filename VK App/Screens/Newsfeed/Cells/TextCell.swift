@@ -10,7 +10,7 @@ import UIKit
 class TextCell: UITableViewCell {
     
     // MARK: - Properties
-
+    
     let message: UILabel = {
         let label = UILabel()
         label.textColor = .black
@@ -18,13 +18,14 @@ class TextCell: UITableViewCell {
         label.numberOfLines = 0
         label.textAlignment = .left
         label.backgroundColor = .systemBackground
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     // MARK: - Initializer
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: CellIdentifier.textCell.rawValue)
+        super.init(style: style, reuseIdentifier: TextCell.reuseID)
         
         setupConstraints()
     }
@@ -37,12 +38,9 @@ class TextCell: UITableViewCell {
     
     private func setupConstraints() {
         contentView.addSubview(message)
-        message.translatesAutoresizingMaskIntoConstraints = false
-        message.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
-        message.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10).isActive = true
-        message.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10).isActive = true
-        message.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10).isActive = true
-        guard let text = message.text else { return }
-        message.heightAnchor.constraint(equalToConstant: text.height(withConstrainedWidth: message.frame.width, font: message.font)).isActive = true
+        
+        message.snp.makeConstraints { make in
+            make.top.bottom.leading.trailing.equalTo(contentView).inset(UIEdgeInsets(top: 0, left: 10, bottom: 10, right: 10))
+        }
     }
 }

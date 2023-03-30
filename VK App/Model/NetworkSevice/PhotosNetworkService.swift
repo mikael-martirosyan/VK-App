@@ -5,7 +5,7 @@
 //  Created by Микаэл Мартиросян on 21.04.2022.
 //
 
-import Foundation
+import UIKit
 import PromiseKit
 
 class PhotosNetworkService {
@@ -43,9 +43,10 @@ class PhotosNetworkService {
             var photos = [PhotosStruct]()
         
             for item in result.response.items {
-                var photo = PhotosStruct(id: item.id, ownerID: item.ownerID, url: "")
+                var photo = PhotosStruct(id: item.id, ownerID: item.ownerID, url: "", aspectRatio: 0)
                 if let size = item.sizes.first(where: { $0.type == photoType.rawValue }) {
                     photo.url = size.url
+                    photo.aspectRatio = CGFloat(size.height) / CGFloat(size.width)
                 }
                 photos.append(photo)
             }

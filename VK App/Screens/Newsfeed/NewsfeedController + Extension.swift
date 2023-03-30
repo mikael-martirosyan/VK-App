@@ -16,13 +16,23 @@ extension NewsfeedController {
     
     // MARK: - Functions
     
+    func setupConfig() {
+        tableView.backgroundColor = .systemBackground
+        
+        tableView.refreshControl = refControl
+        tableView.prefetchDataSource = self
+        
+        title = Title.news.rawValue
+        registerCells()
+    }
+    
     /// Custom summary: Register all cells in tableView
-    func registerCells() {
-        tableView.register(SourceCell.self, forCellReuseIdentifier: CellIdentifier.sourceCell.rawValue)
-        tableView.register(TextCell.self, forCellReuseIdentifier: CellIdentifier.textCell.rawValue)
-        tableView.register(NewsfeedPhotoCell.self, forCellReuseIdentifier: CellIdentifier.newsfeedPhotoCell.rawValue)
-        tableView.register(InteractionsCell.self, forCellReuseIdentifier: CellIdentifier.interactionsCell.rawValue)
-        tableView.register(FooterCell.self, forCellReuseIdentifier: CellIdentifier.footerCell.rawValue)
+    private func registerCells() {
+        tableView.registerCell(SourceCell.self)
+        tableView.registerCell(TextCell.self)
+        tableView.registerCell(NewsfeedPhotoCell.self)
+        tableView.registerCell(InteractionsCell.self)
+        tableView.registerCell(FooterCell.self)
     }
     
     /// Custom summary: Checking userLike for set up LikeControl
@@ -33,9 +43,9 @@ extension NewsfeedController {
             let color = UIColor.red
             cell.likesControl.isLiked = news.userLikes
             cell.likesControl.itemID = news.postID
-            if let accessKey = news.accessKey {
-                cell.likesControl.accessKey = accessKey
-            }
+//            if let accessKey = news.accessKey {
+//                cell.likesControl.accessKey = accessKey
+//            }
             
             completion(image, color)
         default:
@@ -43,10 +53,35 @@ extension NewsfeedController {
             let color = UIColor.systemGray2
             cell.likesControl.isLiked = news.userLikes
             cell.likesControl.itemID = news.postID
-            if let accessKey = news.accessKey {
-                cell.likesControl.accessKey = accessKey
-            }
+//            if let accessKey = news.accessKey {
+//                cell.likesControl.accessKey = accessKey
+//            }
             completion(image, color)
+        }
+    }
+    
+    /// Custom summary: Pull-to-refresh pattern
+    @objc func refreshNewsfeed(sender: UIRefreshControl) {
+        sender.beginRefreshing()
+        
+        let mostFreshNewsDate = newsList.first?.date ?? Date().timeIntervalSince1970
+        
+        self.newsfeedNetworkService.get(startTime: mostFreshNewsDate + 1) { [weak self] news in
+            guard let self = self else { return }
+    
+            DispatchQueue.main.async {
+                sender.endRefreshing()
+            }
+            
+            guard news.count > 0 else { return }
+            
+            self.newsList = news + self.newsList
+            
+            let indexSet = IndexSet(integersIn: 0..<news.count)
+            
+            DispatchQueue.main.async {
+                self.tableView.insertSections(indexSet, with: .automatic)
+            }
         }
     }
     
@@ -54,39 +89,36 @@ extension NewsfeedController {
     
     /// Custom summary: Configure source of news in newsfeed
     func configureSourceCell(by news: NewsfeedStruct, indexPath: IndexPath) -> SourceCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: CellIdentifier.sourceCell.rawValue, for: indexPath) as? SourceCell else { fatalError() }
+        let cell = tableView.dequeueReusableCell(forIndexPath: indexPath) as SourceCell
         
         DispatchQueue.global().async {
             if let url = URL(string: news.avatar) {
                 Networking.fetchImage(url: url) { image in
                     DispatchQueue.main.async {
-                        cell.avatar.image = image
+                        cell.avatarImageView.image = image
                     }
                 }
             }
         }
         
-        cell.name.text = news.name
-        cell.date.text = DateFormatter.getStringDate(date: news.date)
+        cell.nameLabel.text = news.name
+        cell.dateLabel.text = DateFormatter.getStringDate(date: news.date)
         cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
         return cell
     }
     
     /// Custom summary: Configure text of news in newsfeed
     func configureTextCell(by news: NewsfeedStruct, indexPath: IndexPath) -> TextCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: CellIdentifier.textCell.rawValue, for: indexPath) as? TextCell else { fatalError() }
-        if news.text == "" {
-            cell.isHidden = true
-        } else {
-            cell.message.text = news.text
-            cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
-        }
+        let cell = tableView.dequeueReusableCell(forIndexPath: indexPath) as TextCell
+        cell.message.text = news.text
+        
+        cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
         return cell
     }
     
     /// Custom summary: Configure images of news in newsfeed
     func configurePhotoCell(by news: NewsfeedStruct, indexPath: IndexPath) -> NewsfeedPhotoCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: CellIdentifier.newsfeedPhotoCell.rawValue, for: indexPath) as? NewsfeedPhotoCell else { fatalError() }
+        let cell = tableView.dequeueReusableCell(forIndexPath: indexPath) as NewsfeedPhotoCell
         
         DispatchQueue.global().async {
             if let stringURL = news.photoURL, let url = URL(string: stringURL) {
@@ -96,20 +128,15 @@ extension NewsfeedController {
                         cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
                     }
                 }
-            } else {
-                DispatchQueue.main.async {
-                    cell.photoImageView.heightAnchor.constraint(equalToConstant: 0).isActive = true
-                    cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
-                }
             }
         }
-                
+        
         return cell
     }
     
     /// Custom summary: Configure likes, comments, reposts and views  of news in newsfeed
     func configureInteractionsCell(by news: NewsfeedStruct, indexPath: IndexPath) -> InteractionsCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: CellIdentifier.interactionsCell.rawValue, for: indexPath) as? InteractionsCell else { fatalError() }
+        let cell = tableView.dequeueReusableCell(forIndexPath: indexPath) as InteractionsCell
         
         cell.likesControl.likesCount.text = news.likesCount.roundAndConvert()
         cell.commentsControl.commentsCount.text = news.commentsCount.roundAndConvert()
@@ -127,24 +154,60 @@ extension NewsfeedController {
     
     /// Custom summary: Configure footer
     func configureFooterCell(indexPath: IndexPath) -> FooterCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: CellIdentifier.footerCell.rawValue, for: indexPath) as? FooterCell else { fatalError() }
+        let cell = tableView.dequeueReusableCell(forIndexPath: indexPath) as FooterCell
         cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
         return cell
     }
     
     
-//    func configureCell<T: UITableViewCell>(identifier: CellIdentifiers, indexPath: IndexPath, type: T) -> T {
-//        guard let cell = tableView.dequeueReusableCell(withIdentifier: identifier.rawValue, for: indexPath) as? T else { fatalError() }
+    // Прототип дженерика для конфигурации ячеек - на доработке
+//    func configureCell<T: UITableViewCell>(identifier: String,
+//                                           stringURL: String? = nil,
+//                                           indexPath: IndexPath,
+//                                           type: T,
+//                                           completion: @escaping (T, UIImage) -> Void) -> T {
+//
+//        let cell = tableView.dequeueReusableCell(forIndexPath: indexPath) as T
+//
+//        cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
+//
+//        DispatchQueue.global().async {
+//            if let stringURL = stringURL, let url = URL(string: stringURL) {
+//                Networking.fetchImage(url: url) { image in
+//                    DispatchQueue.main.async {
+//                        completion(cell, image)
+//                    }
+//                }
+//            }
+//        }
+//
 //        return cell
 //    }
-    
-    
-    
-//    func calculateCellHeight<T>(cell: T, indexPath: IndexPath, completion: (T) -> Void) {
-//        guard let cell = tableView.cellForRow(at: indexPath) as? T else { return }
-//        completion(cell)
-//    }
-    
-    
+}
 
+// MARK: - Table view data source prefetching
+extension NewsfeedController: UITableViewDataSourcePrefetching {
+    
+    /// Custom summary: Infinite scrolling pattern
+    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        guard let maxSection = indexPaths.map({ $0.section }).max() else { return }
+        
+        if maxSection > newsList.count - 3 && !isLoading {
+            
+            isLoading = true
+            
+            self.newsfeedNetworkService.get(startFrom: nextFrom) { [weak self] news in
+                guard let self = self else { return }
+                let indexSet = IndexSet(integersIn: self.newsList.count ..< self.newsList.count + news.count)
+                
+                self.newsList.append(contentsOf: news)
+                self.nextFrom = news.first?.nextFrom ?? self.nextFrom
+                
+                DispatchQueue.main.async {
+                    self.tableView.insertSections(indexSet, with: .automatic)
+                }
+                self.isLoading = false
+            }
+        }
+    }
 }

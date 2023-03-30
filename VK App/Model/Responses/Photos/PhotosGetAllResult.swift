@@ -5,7 +5,7 @@
 //  Created by Микаэл Мартиросян on 21.04.2022.
 //
 
-import Foundation
+import UIKit
 
 struct PhotosGetAllResult: Decodable {
     let response: PhotosGetAllResponse
@@ -31,6 +31,6 @@ struct PhotosGetAllItem: Decodable {
 struct PhotoGetAllSize: Decodable {
     let url: String
     let type: String
-//    let width: Int
-//    let height: Int
+    let width: Int
+    let height: Int
 }

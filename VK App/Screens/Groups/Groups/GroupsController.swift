@@ -15,7 +15,7 @@ class GroupsController: UITableViewController {
     private let networkService = GroupsNetworkService()
     private var groups = [GroupsGetItem]()
     
-    // MARK: - viewDidLoad
+    // MARK: - Life Cycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,7 +24,7 @@ class GroupsController: UITableViewController {
         navigationItem.title = Title.groups.rawValue
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: self, action: #selector(groupSearch))
         
-        tableView.register(GroupsCell.self, forCellReuseIdentifier: CellIdentifier.groupsCell.rawValue)
+        tableView.registerCell(UniversalTableViewCell.self)
         
 //        networkService.get { [weak self] response in
 //            guard let self = self else { return }
@@ -59,10 +59,9 @@ class GroupsController: UITableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return groups.count
     }
-
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: CellIdentifier.groupsCell.rawValue, for: indexPath) as? GroupsCell else { return UITableViewCell() }
+        let cell = tableView.dequeueReusableCell(forIndexPath: indexPath) as UniversalTableViewCell
         
 //        DispatchQueue.global().async {
 //            if let url = URL(string: self.groups[indexPath.row].photo50) {
@@ -79,13 +78,13 @@ class GroupsController: UITableViewController {
             firstly {
                 Networking.fetchImage(url: url)
             }.done { image in
-                cell.avatar.image = image
+                cell.avatarImageView.image = image
             }.catch { error in
                 print(error)
             }
         }
 
-        cell.name.text = groups[indexPath.row].name
+        cell.nameLabel.text = groups[indexPath.row].name
 
         return cell
     }

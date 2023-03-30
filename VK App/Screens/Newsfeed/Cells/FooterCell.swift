@@ -12,7 +12,7 @@ class FooterCell: UITableViewCell {
     private let footerView = UIView()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: CellIdentifier.footerCell.rawValue)
+        super.init(style: style, reuseIdentifier: FooterCell.reuseID)
         
         footerView.backgroundColor = .gray
         footerView.alpha = 0.1
@@ -30,6 +30,6 @@ class FooterCell: UITableViewCell {
         footerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 0).isActive = true
         footerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
         footerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
-        footerView.heightAnchor.constraint(equalToConstant: 10).isActive = true
+//        footerView.heightAnchor.constraint(equalToConstant: 10).isActive = true
     }
 }

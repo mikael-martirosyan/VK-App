@@ -14,18 +14,16 @@ class NewsfeedPhotoCell: UITableViewCell {
     let photoImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
+        imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
     // MARK: - Initializer
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: CellIdentifier.newsfeedPhotoCell.rawValue)
+        super.init(style: style, reuseIdentifier: NewsfeedPhotoCell.reuseID)
         
         setupConstraints()
-        
-//        let width = contentView.frame.width
-        
     }
     
     required init?(coder: NSCoder) {
@@ -36,12 +34,10 @@ class NewsfeedPhotoCell: UITableViewCell {
     
     private func setupConstraints() {
         contentView.addSubview(photoImageView)
-        photoImageView.translatesAutoresizingMaskIntoConstraints = false
-        photoImageView.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
-        photoImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
-        photoImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
-        photoImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
-        photoImageView.heightAnchor.constraint(equalToConstant: contentView.frame.width * 16/9).isActive = true
+        
+        photoImageView.snp.makeConstraints { make in
+            make.top.bottom.leading.trailing.equalTo(contentView)
+        }
     }
     
     override func prepareForReuse() {

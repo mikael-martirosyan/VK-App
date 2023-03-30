@@ -17,6 +17,24 @@
         "revision" : "2e63d0061da449ad0ed130768d05dceb1496de44",
         "version" : "5.12.5"
       }
+    },
+    {
+      "identity" : "snapkit?ysclid=lfl9rkva29504053148",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SnapKit/SnapKit?ysclid=lfl9rkva29504053148",
+      "state" : {
+        "revision" : "f222cbdf325885926566172f6f5f06af95473158",
+        "version" : "5.6.0"
+      }
+    },
+    {
+      "identity" : "swiftyjson",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SwiftyJSON/SwiftyJSON",
+      "state" : {
+        "revision" : "b3dcd7dbd0d488e1a7077cb33b00f2083e382f07",
+        "version" : "5.0.1"
+      }
     }
   ],
   "version" : 2

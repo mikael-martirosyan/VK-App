@@ -19,6 +19,12 @@ struct NewsfeedGetResponse: Decodable {
     let items: [NewsfeedGetItem]
     let groups: [NewsfeedGetGroup]
     let profiles: [NewsfeedGetProfile]
+    let nextFrom: String
+    
+    enum CodingKeys: String, CodingKey {
+        case items, groups, profiles
+        case nextFrom = "next_from"
+    }
 }
 
     // MARK: - Item
@@ -26,7 +32,7 @@ struct NewsfeedGetResponse: Decodable {
 struct NewsfeedGetItem: Decodable {
     let sourceID: Int
     let postID: Int
-    let date: Double
+    let date: TimeInterval
     let text: String?
     let comments: CountableItem
     let likes: Likes
