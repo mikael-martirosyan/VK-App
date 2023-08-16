@@ -1,5 +1,5 @@
 //
-//  Identifiers.swift
+//  Title.swift
 //  VK App
 //
 //  Created by Микаэл Мартиросян on 29.03.2022.

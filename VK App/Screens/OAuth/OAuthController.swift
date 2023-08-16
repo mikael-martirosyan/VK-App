@@ -47,7 +47,7 @@ class OAuthController: UIViewController {
         urlComponents.path = "/authorize"
         #warning("изменить значение 'your_app_id' на 50 строке")
         urlComponents.queryItems = [
-            URLQueryItem(name: "client_id", value: "your_app_id"),
+            URLQueryItem(name: "client_id", value: "8120977"),
             URLQueryItem(name: "display", value: "mobile"),
             URLQueryItem(name: "redirect_uri", value:
                             "https://oauth.vk.com/blank.html"),

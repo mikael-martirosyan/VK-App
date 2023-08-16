@@ -1,5 +1,5 @@
 //
-//  VKImageView.swift
+//  VKRoundedImageView.swift
 //  VK App
 //
 //  Created by Микаэл Мартиросян on 22.03.2023.

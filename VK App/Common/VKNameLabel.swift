@@ -1,5 +1,5 @@
 //
-//  VKTitleTableViewCell.swift
+//  VKNameLabel.swift
 //  VK App
 //
 //  Created by Микаэл Мартиросян on 23.03.2023.
